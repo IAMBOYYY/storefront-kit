@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Store</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>
+    /* HERO */
+    .hero { position:relative; padding:90px 24px 80px; text-align:center; overflow:hidden; }
+    .hero-bg { position:absolute;inset:0; background:radial-gradient(ellipse 90% 70% at 50% -10%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 65%); pointer-events:none; }
+    .hero-bg-img { position:absolute;inset:0; background-size:cover; background-position:center; opacity:.15; }
+    .hero-noise { position:absolute;inset:0; opacity:.03; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); pointer-events:none; }
+    .hero h1 { font-family:var(--font-head); font-size:clamp(2.4rem,7vw,5rem); font-weight:800; line-height:1.05; letter-spacing:-2px; position:relative; margin-bottom:18px; }
+    .hero h1 em { font-style:normal; color:var(--primary); }
+    .hero p { font-size:clamp(.95rem,2vw,1.15rem); color:var(--text2); max-width:520px; margin:0 auto 36px; position:relative; line-height:1.7; }
+    .hero-cta { display:inline-flex; align-items:center; gap:10px; background:var(--primary); color:#fff; padding:15px 32px; border-radius:var(--radius-full); font-weight:700; font-family:var(--font-head); text-decoration:none; font-size:1rem; position:relative; transition:transform .2s,box-shadow .2s; box-shadow:0 0 40px color-mix(in srgb,var(--primary) 45%,transparent); }
+    .hero-cta:hover { transform:translateY(-3px); box-shadow:0 8px 48px color-mix(in srgb,var(--primary) 60%,transparent); }
+    .hero-cta svg { transition:transform .2s; }
+    .hero-cta:hover svg { transform:translateX(3px); }
+    /* FLOATING CARDS DECORATIONS */
+    .hero-deco { position:absolute; pointer-events:none; }
+    .hero-deco-1 { top:15%; left:6%; width:80px; height:80px; background:color-mix(in srgb,var(--primary) 12%,transparent); border:1px solid color-mix(in srgb,var(--primary) 20%,transparent); border-radius:16px; transform:rotate(15deg); animation:floatA 6s ease-in-out infinite; }
+    .hero-deco-2 { top:25%; right:8%; width:50px; height:50px; background:color-mix(in srgb,var(--accent) 15%,transparent); border:1px solid color-mix(in srgb,var(--accent) 25%,transparent); border-radius:50%; animation:floatB 7s ease-in-out infinite; }
+    .hero-deco-3 { bottom:20%; left:10%; width:35px; height:35px; background:color-mix(in srgb,var(--primary) 10%,transparent); border-radius:8px; transform:rotate(-20deg); animation:floatA 5s ease-in-out infinite 1s; }
+    @keyframes floatA { 0%,100%{transform:rotate(15deg) translateY(0)} 50%{transform:rotate(15deg) translateY(-12px)} }
+    @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+    @media(max-width:600px){.hero-deco{display:none}}
+    /* STATS BAR */
+    .stats-bar { display:flex; gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .stat-item { flex:1; padding:18px 12px; text-align:center; border-right:1px solid var(--border); }
+    .stat-item:last-child { border-right:none; }
+    .stat-num { font-family:var(--font-head); font-size:1.4rem; font-weight:800; color:var(--primary); }
+    .stat-lbl { font-size:11px; color:var(--text3); margin-top:2px; }
+    /* EMPTY */
+    .empty-state { text-align:center; padding:80px 24px; color:var(--text2); grid-column:1/-1; }
+    .empty-state p { font-size:1rem; }
+  </style>
+</head>
+<body>
+
+<div id="announcementBar"></div>
+<nav id="mainNav"></nav>
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-bg-img" id="heroBgImg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-deco hero-deco-3"></div>
+  <h1 id="heroHeadline">Welcome</h1>
+  <p id="heroSub"></p>
+  <a href="#products" class="hero-cta" id="heroCta">
+    Shop Now
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+  </a>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar" style="display:none">
+  <div class="stat-item"><div class="stat-num" id="statProd">0</div><div class="stat-lbl">Products</div></div>
+  <div class="stat-item"><div class="stat-num" id="statCats">0</div><div class="stat-lbl">Categories</div></div>
+  <div class="stat-item"><div class="stat-num">COD</div><div class="stat-lbl">Payment</div></div>
+  <div class="stat-item"><div class="stat-num">Free</div><div class="stat-lbl">Returns</div></div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="section" id="productsSection">
+  <p class="section-label">Our Collection</p>
+  <h2 class="section-title" id="productsTitle">All Products</h2>
+  <div class="cat-pills" id="catPills" style="display:none"></div>
+  <div class="products-grid" id="productsGrid">
+    <!-- Skeletons -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden">
+      <div class="skeleton" style="aspect-ratio:1"></div>
+      <div style="padding:14px"><div class="skeleton" style="height:12px;margin-bottom:8px;width:60%"></div><div class="skeleton" style="height:18px;margin-bottom:10px"></div><div class="skeleton" style="height:28px;border-radius:50px"></div></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden">
+      <div class="skeleton" style="aspect-ratio:1"></div>
+      <div style="padding:14px"><div class="skeleton" style="height:12px;margin-bottom:8px;width:60%"></div><div class="skeleton" style="height:18px;margin-bottom:10px"></div><div class="skeleton" style="height:28px;border-radius:50px"></div></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden" class="hide-mobile">
+      <div class="skeleton" style="aspect-ratio:1"></div>
+      <div style="padding:14px"><div class="skeleton" style="height:12px;margin-bottom:8px;width:60%"></div><div class="skeleton" style="height:18px;margin-bottom:10px"></div><div class="skeleton" style="height:28px;border-radius:50px"></div></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden" class="hide-mobile">
+      <div class="skeleton" style="aspect-ratio:1"></div>
+      <div style="padding:14px"><div class="skeleton" style="height:12px;margin-bottom:8px;width:60%"></div><div class="skeleton" style="height:18px;margin-bottom:10px"></div><div class="skeleton" style="height:28px;border-radius:50px"></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span id="footerTagline"></span>
+  <span id="poweredBy"> · Built with <a href="https://github.com/IAMBOYYY/storefront-kit" target="_blank">StorefrontKit</a></span>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  let allProducts = [];
+  let activeCategory = 'All';
+  let searchQuery = '';
+
+  // Handle hash search from other pages
+  if (location.hash.startsWith('#search=')) {
+    searchQuery = decodeURIComponent(location.hash.replace('#search=',''));
+    history.replaceState(null,'',location.pathname + '#products');
+  }
+
+  SK._onSearch = function(q) {
+    searchQuery = q;
+    renderGrid();
+    document.getElementById('productsSection')?.scrollIntoView({ behavior:'smooth' });
+  };
+
+  async function main() {
+    await SK.init();
+    SK.renderNav('home');
+    applyHero();
+    applyFooter();
+    await SK.loadProducts();
+    allProducts = SK.products;
+    updateStats();
+    renderCategories();
+    renderGrid();
+  }
+
+  function applyHero() {
+    const h = SK.config.hero || {};
+    const el = document.getElementById('heroSection');
+    if (!h.enabled) { el.style.display='none'; return; }
+    // headline: last word gets primary color
+    const words = (h.headline || 'Welcome').split(' ');
+    words[words.length-1] = `<em>${words[words.length-1]}</em>`;
+    document.getElementById('heroHeadline').innerHTML = words.join(' ');
+    document.getElementById('heroSub').textContent = h.subheadline || '';
+    const cta = document.getElementById('heroCta');
+    cta.textContent = ''; // clear
+    cta.innerHTML = `${h.ctaText || 'Shop Now'} <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>`;
+    cta.href = h.ctaUrl || '#products';
+    if (h.backgroundImage) {
+      document.getElementById('heroBgImg').style.backgroundImage = `url('${h.backgroundImage}')`;
+    }
+    document.title = SK.config.store?.name || 'My Store';
+  }
+
+  function applyFooter() {
+    const ft = SK.config.footer || {};
+    document.getElementById('footerTagline').textContent = ft.tagline || (SK.config.store?.name || 'My Store');
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+  }
+
+  function updateStats() {
+    const cats = new Set(allProducts.map(p => p.category).filter(Boolean));
+    document.getElementById('statProd').textContent = allProducts.length;
+    document.getElementById('statCats').textContent = cats.size;
+    document.getElementById('statsBar').style.display = allProducts.length ? 'flex' : 'none';
+  }
+
+  function renderCategories() {
+    const f = SK.config.features || {};
+    if (!f.categories) return;
+    const cats = ['All', ...new Set(allProducts.map(p => p.category).filter(Boolean))];
+    if (cats.length <= 2) return;
+    const el = document.getElementById('catPills');
+    el.style.display = 'flex';
+    el.innerHTML = cats.map(c => `<div class="cat-pill ${c===activeCategory?'active':''}" onclick="filterCat('${c.replace(/'/g,"\\'")}')">${c}</div>`).join('');
+  }
+
+  function filterCat(cat) {
+    activeCategory = cat;
+    renderCategories();
+    renderGrid();
+  }
+
+  function renderGrid() {
+    const f = SK.config.features || {};
+    let list = allProducts;
+    if (activeCategory !== 'All') list = list.filter(p => p.category === activeCategory);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(p => [p.name, p.description, p.category, ...(Object.values(p.specs||{}))].join(' ').toLowerCase().includes(q));
+    }
+
+    const title = document.getElementById('productsTitle');
+    title.textContent = searchQuery ? `Results for "${searchQuery}"` : activeCategory === 'All' ? 'All Products' : activeCategory;
+
+    const grid = document.getElementById('productsGrid');
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;display:block;margin:0 auto 16px"><path d="M21 21l-4.35-4.35M11 19A8 8 0 1 0 11 3a8 8 0 0 0 0 16z"/></svg><p>${searchQuery ? 'No products match your search.' : 'No products found.'}</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(p => {
+      const imgs = SK.getProductImages(p);
+      const hasMulti = imgs.length > 1;
+      const stock = SK.stockLabel(p.stock || 'in_stock');
+      return `
+      <div class="product-card" onclick="goProduct('${p.id}')">
+        <div class="product-img-wrap" data-imgs='${JSON.stringify(imgs).replace(/'/g,"&#39;")}' data-idx="0">
+          <img src="${imgs[0]}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/400x400/1a1a26/555570?text=No+Image'" />
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+          ${hasMulti ? `<div class="img-dots">${imgs.map((_,i)=>`<div class="img-dot${i===0?' active':''}"></div>`).join('')}</div>` : ''}
+          ${p.stock === 'out_of_stock' ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;letter-spacing:1px">OUT OF STOCK</div>` : ''}
+        </div>
+        <div class="product-body">
+          ${p.category ? `<div class="product-cat">${p.category}</div>` : ''}
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.description || ''}</div>
+          <div class="product-footer">
+            <div>
+              ${p.oldPrice ? `<div class="product-old">${SK.price(p.oldPrice)}</div>` : ''}
+              <div class="product-price">${SK.price(p.price)}</div>
+            </div>
+            ${f.cart !== false && p.stock !== 'out_of_stock'
+              ? `<button class="add-btn" onclick="event.stopPropagation();quickAdd('${p.id}')">+ Add</button>`
+              : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Multi-image hover cycling
+    grid.querySelectorAll('.product-img-wrap[data-imgs]').forEach(wrap => {
+      const imgs = JSON.parse(wrap.dataset.imgs);
+      if (imgs.length < 2) return;
+      let idx = 0, timer;
+      wrap.addEventListener('mouseenter', () => {
+        timer = setInterval(() => {
+          idx = (idx + 1) % imgs.length;
+          wrap.querySelector('img').src = imgs[idx];
+          wrap.dataset.idx = idx;
+          wrap.querySelectorAll('.img-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+        }, 1200);
+      });
+      wrap.addEventListener('mouseleave', () => {
+        clearInterval(timer);
+        idx = 0;
+        wrap.querySelector('img').src = imgs[0];
+        wrap.querySelectorAll('.img-dot').forEach((d,i) => d.classList.toggle('active', i===0));
+      });
+    });
+  }
+
+  function goProduct(id) {
+    window.location.href = `./product.html?id=${id}`;
+  }
+
+  function quickAdd(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (p) SK.addToCart(p);
+  }
+
+  main();
+</script>
+</body>
+</html>
