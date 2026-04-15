@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — My Store</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>
+    .checkout-page { max-width:900px; margin:0 auto; padding:32px 24px 80px; }
+    .checkout-header { margin-bottom:36px; }
+    .checkout-header h1 { font-family:var(--font-head); font-size:clamp(1.8rem,4vw,2.4rem); font-weight:800; letter-spacing:-.5px; margin-bottom:6px; }
+    .checkout-header p { color:var(--text2); font-size:14px; }
+    .order-id { display:inline-flex; align-items:center; gap:8px; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:6px 14px; font-size:13px; font-weight:600; margin-top:12px; font-family:monospace; letter-spacing:1px; }
+
+    .checkout-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:720px){ .checkout-grid{grid-template-columns:1fr} }
+
+    .checkout-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; }
+    .checkout-card h2 { font-family:var(--font-head); font-size:1rem; font-weight:800; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+    .checkout-card h2 span { width:24px; height:24px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; }
+
+    /* ORDER ITEMS */
+    .order-line { display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+    .order-line:last-child { border-bottom:none; }
+    .order-line img { width:50px; height:50px; object-fit:cover; border-radius:var(--radius-sm); background:var(--bg3); flex-shrink:0; }
+    .order-line-info { flex:1; min-width:0; }
+    .order-line-name { font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .order-line-qty { font-size:12px; color:var(--text2); }
+    .order-line-price { font-family:var(--font-head); font-weight:700; font-size:1rem; flex-shrink:0; }
+    .order-total-row { display:flex; justify-content:space-between; padding-top:14px; margin-top:4px; border-top:1px solid var(--border); }
+    .order-total-row span:first-child { font-size:14px; color:var(--text2); }
+    .order-total-row span:last-child { font-family:var(--font-head); font-size:1.3rem; font-weight:800; }
+
+    /* PAYMENT */
+    .cod-big { background:color-mix(in srgb,var(--success) 8%,transparent); border:1px solid color-mix(in srgb,var(--success) 18%,transparent); border-radius:var(--radius-sm); padding:16px; display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .cod-icon { width:44px; height:44px; background:color-mix(in srgb,var(--success) 15%,transparent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .cod-info strong { display:block; font-size:15px; font-weight:700; color:var(--success); }
+    .cod-info span { font-size:13px; color:var(--text2); }
+    .delivery-note { background:var(--bg3); border-radius:var(--radius-sm); padding:12px 14px; font-size:13px; color:var(--text2); line-height:1.6; }
+
+    /* PLACE ORDER */
+    .place-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-top:24px; }
+    .place-card h2 { font-family:var(--font-head); font-size:1.1rem; font-weight:800; margin-bottom:6px; }
+    .place-card p { color:var(--text2); font-size:13px; margin-bottom:20px; line-height:1.6; }
+    .channels-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
+    .channel-btn {
+      display:flex; align-items:center; gap:10px;
+      padding:13px 16px;
+      border-radius:var(--radius-md);
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:700;
+      font-family:var(--font-head);
+      color:#fff;
+      text-decoration:none;
+      transition:transform .15s, opacity .2s, box-shadow .2s;
+    }
+    .channel-btn:hover { transform:translateY(-2px); opacity:.9; }
+    .channel-icon { font-size:18px; }
+    .channel-label { flex:1; text-align:left; }
+    .channel-arrow { font-size:12px; opacity:.7; }
+    .no-channels { text-align:center; color:var(--text2); padding:20px; font-size:14px; }
+
+    /* EMPTY */
+    .checkout-empty { text-align:center; padding:80px 24px; }
+    .checkout-empty svg { opacity:.25; display:block; margin:0 auto 20px; }
+    .checkout-empty h2 { font-family:var(--font-head); font-size:1.5rem; font-weight:800; margin-bottom:10px; }
+    .checkout-empty p { color:var(--text2); margin-bottom:28px; }
+
+    /* STEPS */
+    .steps-bar { display:flex; align-items:center; gap:0; margin-bottom:32px; font-size:13px; }
+    .step-item { display:flex; align-items:center; gap:6px; color:var(--text3); }
+    .step-item.active { color:var(--primary); font-weight:600; }
+    .step-item.done { color:var(--success); }
+    .step-sep { margin:0 10px; color:var(--text3); }
+  </style>
+</head>
+<body>
+<div id="announcementBar"></div>
+<nav id="mainNav"></nav>
+
+<div class="checkout-page">
+
+  <div id="checkoutEmpty" class="checkout-empty" style="display:none">
+    <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <h2>Nothing to checkout</h2>
+    <p>Your cart is empty. Add some products first.</p>
+    <a href="./index.html" class="btn btn-primary">Browse Products</a>
+  </div>
+
+  <div id="checkoutContent" style="display:none">
+    <!-- Steps -->
+    <div class="steps-bar">
+      <div class="step-item done">🛍️ Cart</div>
+      <div class="step-sep">›</div>
+      <div class="step-item active">📋 Checkout</div>
+      <div class="step-sep">›</div>
+      <div class="step-item">✅ Confirmed</div>
+    </div>
+
+    <div class="checkout-header">
+      <h1>Review Your Order</h1>
+      <p>Check your items, then place your order via your preferred channel.</p>
+      <div class="order-id" id="orderIdBadge" style="display:none">
+        🔖 Order ID: <strong id="orderIdVal"></strong>
+      </div>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- ORDER SUMMARY -->
+      <div class="checkout-card">
+        <h2><span>1</span> Order Summary</h2>
+        <div id="orderLines"></div>
+        <div class="order-total-row">
+          <span>Total Amount</span>
+          <span id="orderTotal"></span>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="checkout-card">
+        <h2><span>2</span> Payment</h2>
+        <div class="cod-big">
+          <div class="cod-icon">💵</div>
+          <div class="cod-info">
+            <strong>Cash on Delivery</strong>
+            <span>Pay when your order arrives</span>
+          </div>
+        </div>
+        <div class="delivery-note" id="deliveryNote"></div>
+      </div>
+    </div>
+
+    <!-- PLACE ORDER -->
+    <div class="place-card">
+      <h2>📲 Place Your Order</h2>
+      <p>Tap a channel below to send us your order. We'll confirm it and arrange delivery.</p>
+      <div class="channels-grid" id="channelsGrid"></div>
+    </div>
+
+    <p style="text-align:center;color:var(--text3);font-size:12px;margin-top:20px">
+      <a href="./cart.html" style="color:var(--primary);text-decoration:none">← Edit Cart</a>
+      &nbsp;·&nbsp;
+      <a href="./index.html" style="color:var(--text3);text-decoration:none">Continue Shopping</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <span id="footerTagline"></span>
+  <span id="poweredBy"> · Built with <a href="https://github.com/IAMBOYYY/storefront-kit" target="_blank">StorefrontKit</a></span>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  async function main() {
+    await SK.init();
+    SK.renderNav();
+    await SK.loadProducts();
+    const cart = SK.getCart();
+    const ft = SK.config.footer || {};
+    document.getElementById('footerTagline').textContent = ft.tagline || '';
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+    document.title = `Checkout — ${SK.config.store?.name || 'My Store'}`;
+
+    if (!cart.length) {
+      document.getElementById('checkoutEmpty').style.display = '';
+      return;
+    }
+    document.getElementById('checkoutContent').style.display = '';
+
+    // Order ID
+    const chk = SK.config.checkout || {};
+    if (chk.showOrderId !== false) {
+      document.getElementById('orderIdBadge').style.display = '';
+      document.getElementById('orderIdVal').textContent = SK._getOrderId();
+    }
+
+    // Delivery note
+    document.getElementById('deliveryNote').textContent = chk.deliveryNote || 'Our team will contact you to confirm delivery.';
+
+    renderOrderLines(cart);
+    renderChannels();
+  }
+
+  function renderOrderLines(cart) {
+    document.getElementById('orderLines').innerHTML = cart.map(item => {
+      const p = SK.products.find(x => x.id === item.id);
+      const img = p ? SK.getProductImages(p)[0] : item.image;
+      return `
+      <div class="order-line">
+        <img src="${img || 'https://placehold.co/50x50/1a1a26/555570?text=?'}" onerror="this.src='https://placehold.co/50x50/1a1a26/555570?text=?'" />
+        <div class="order-line-info">
+          <div class="order-line-name">${item.name}</div>
+          <div class="order-line-qty">Qty: ${item.qty} × ${SK.price(item.price)}</div>
+        </div>
+        <div class="order-line-price">${SK.price(item.price * item.qty)}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('orderTotal').textContent = SK.price(SK.cartTotal());
+  }
+
+  function renderChannels() {
+    const c = SK.config.contact || {};
+    const channels = SK.config.contact?.channels || {};
+    const checkoutChannels = c.checkoutChannels?.length ? c.checkoutChannels : Object.keys(channels).filter(k => channels[k]);
+    const orderMsg = SK.buildOrderMessage();
+    const grid = document.getElementById('channelsGrid');
+
+    const enabledChannels = checkoutChannels.filter(ch => channels[ch]);
+
+    if (!enabledChannels.length) {
+      grid.innerHTML = `<div class="no-channels">No contact channels configured yet.<br><a href="./admin.html" style="color:var(--primary)">Set them up in config.json</a></div>`;
+      return;
+    }
+
+    grid.innerHTML = enabledChannels.map(ch => {
+      const meta = SK.CHANNEL_META[ch] || { label: ch, icon: '📩', bg: '#6366f1' };
+      const url = SK.contactUrl(ch, orderMsg);
+      if (!url) return '';
+      return `<a href="${url}" target="_blank" class="channel-btn" style="background:${meta.bg};box-shadow:0 4px 20px ${meta.bg}44" onclick="onChannelClick()">
+        <span class="channel-icon">${meta.icon}</span>
+        <span class="channel-label">${meta.label}</span>
+        <span class="channel-arrow">→</span>
+      </a>`;
+    }).join('');
+  }
+
+  function onChannelClick() {
+    // Show confirmation after a brief delay
+    setTimeout(() => {
+      const chk = SK.config.checkout || {};
+      SK.toast(chk.thankYouMessage || 'Order sent! We will be in touch shortly.', 'success');
+    }, 500);
+  }
+
+  main();
+</script>
+</body>
+</html>
