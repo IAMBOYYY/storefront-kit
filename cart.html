@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart — My Store</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>
+    .cart-page { max-width:1100px; margin:0 auto; padding:32px 24px 80px; }
+    .cart-page h1 { font-family:var(--font-head); font-size:clamp(1.8rem,4vw,2.4rem); font-weight:800; letter-spacing:-.5px; margin-bottom:32px; }
+    .cart-layout { display:grid; grid-template-columns:1fr 340px; gap:24px; align-items:start; }
+    @media(max-width:800px){ .cart-layout{grid-template-columns:1fr} }
+
+    .cart-items-wrap { display:flex; flex-direction:column; gap:12px; }
+    .cart-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; display:flex; gap:14px; align-items:center; transition:border-color .2s; }
+    .cart-item:hover { border-color:color-mix(in srgb,var(--primary) 30%,transparent); }
+    .cart-item-img { width:80px; height:80px; object-fit:cover; border-radius:var(--radius-sm); background:var(--bg3); flex-shrink:0; cursor:pointer; }
+    .cart-item-body { flex:1; min-width:0; }
+    .cart-item-name { font-family:var(--font-head); font-weight:700; font-size:1rem; margin-bottom:4px; cursor:pointer; }
+    .cart-item-name:hover { color:var(--primary); }
+    .cart-item-price { font-size:13px; color:var(--text2); margin-bottom:10px; }
+    .cart-item-price strong { color:var(--primary); font-family:var(--font-head); }
+    .qty-ctrl { display:inline-flex; align-items:center; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-full); overflow:hidden; }
+    .qty-ctrl button { background:none; border:none; color:var(--text); width:32px; height:32px; cursor:pointer; font-size:16px; transition:background .2s; display:flex; align-items:center; justify-content:center; }
+    .qty-ctrl button:hover { background:var(--primary); color:#fff; }
+    .qty-ctrl span { min-width:32px; text-align:center; font-weight:700; font-size:14px; }
+    .cart-item-line { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .cart-item-total { font-family:var(--font-head); font-weight:800; font-size:1.1rem; }
+    .remove-btn { background:none; border:none; color:var(--text3); cursor:pointer; padding:6px; border-radius:8px; transition:color .2s, background .2s; flex-shrink:0; }
+    .remove-btn:hover { color:var(--danger); background:color-mix(in srgb,var(--danger) 10%,transparent); }
+
+    /* ORDER SUMMARY */
+    .order-summary { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; position:sticky; top:80px; }
+    .order-summary h2 { font-family:var(--font-head); font-size:1.1rem; font-weight:800; margin-bottom:20px; }
+    .summary-row { display:flex; justify-content:space-between; padding:8px 0; font-size:14px; color:var(--text2); border-bottom:1px solid var(--border); }
+    .summary-row:last-of-type { border-bottom:none; }
+    .summary-row.total { font-family:var(--font-head); font-size:1.2rem; font-weight:800; color:var(--text); margin-top:4px; padding-top:16px; border-top:1px solid var(--border); }
+    .cod-badge { display:flex; align-items:center; gap:8px; background:color-mix(in srgb,var(--success) 10%,transparent); border:1px solid color-mix(in srgb,var(--success) 20%,transparent); border-radius:var(--radius-sm); padding:10px 14px; margin:16px 0; font-size:13px; font-weight:600; color:var(--success); }
+    .checkout-btn { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-full); font-size:1rem; font-weight:700; font-family:var(--font-head); cursor:pointer; margin-top:12px; transition:opacity .2s, transform .15s; box-shadow:0 4px 24px color-mix(in srgb,var(--primary) 40%,transparent); }
+    .checkout-btn:hover { opacity:.88; transform:translateY(-1px); }
+    .continue-link { display:block; text-align:center; color:var(--text2); font-size:13px; margin-top:14px; text-decoration:none; }
+    .continue-link:hover { color:var(--primary); }
+
+    /* EMPTY */
+    .cart-empty { text-align:center; padding:80px 24px; }
+    .cart-empty svg { opacity:.25; display:block; margin:0 auto 20px; }
+    .cart-empty h2 { font-family:var(--font-head); font-size:1.5rem; font-weight:800; margin-bottom:10px; }
+    .cart-empty p { color:var(--text2); margin-bottom:28px; }
+  </style>
+</head>
+<body>
+<div id="announcementBar"></div>
+<nav id="mainNav"></nav>
+
+<div class="cart-page">
+  <h1>Your Cart <span id="cartCountTitle" style="font-size:1rem;color:var(--text2);font-weight:400"></span></h1>
+
+  <div id="cartEmpty" class="cart-empty" style="display:none">
+    <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <h2>Your cart is empty</h2>
+    <p>Add some products to get started</p>
+    <a href="./index.html" class="btn btn-primary">Browse Products</a>
+  </div>
+
+  <div class="cart-layout" id="cartLayout">
+    <div class="cart-items-wrap" id="cartItems"></div>
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div id="summaryLines"></div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <div class="cod-badge">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Cash on Delivery
+      </div>
+      <button class="checkout-btn" onclick="window.location.href='./checkout.html'">
+        Proceed to Checkout →
+      </button>
+      <a href="./index.html" class="continue-link">← Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span id="footerTagline"></span>
+  <span id="poweredBy"> · Built with <a href="https://github.com/IAMBOYYY/storefront-kit" target="_blank">StorefrontKit</a></span>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  async function main() {
+    await SK.init();
+    SK.renderNav();
+    await SK.loadProducts();
+    renderCart();
+    const ft = SK.config.footer || {};
+    document.getElementById('footerTagline').textContent = ft.tagline || '';
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+    document.title = `Cart — ${SK.config.store?.name || 'My Store'}`;
+  }
+
+  function renderCart() {
+    const cart = SK.getCart();
+    const empty = document.getElementById('cartEmpty');
+    const layout = document.getElementById('cartLayout');
+
+    if (!cart.length) {
+      empty.style.display = '';
+      layout.style.display = 'none';
+      document.getElementById('cartCountTitle').textContent = '';
+      return;
+    }
+    empty.style.display = 'none';
+    layout.style.display = '';
+    document.getElementById('cartCountTitle').textContent = `(${SK.cartCount()} item${SK.cartCount()>1?'s':''})`;
+
+    // Items
+    document.getElementById('cartItems').innerHTML = cart.map(item => {
+      const p = SK.products.find(x => x.id === item.id);
+      const img = p ? SK.getProductImages(p)[0] : item.image;
+      return `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${img || 'https://placehold.co/80x80/1a1a26/555570?text=?'}" onclick="window.location.href='./product.html?id=${item.id}'" onerror="this.src='https://placehold.co/80x80/1a1a26/555570?text=?'" />
+        <div class="cart-item-body">
+          <div class="cart-item-name" onclick="window.location.href='./product.html?id=${item.id}'">${item.name}</div>
+          <div class="cart-item-price">Unit price: <strong>${SK.price(item.price)}</strong></div>
+          <div class="cart-item-line">
+            <div class="qty-ctrl">
+              <button onclick="changeQty('${item.id}',-1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty('${item.id}',1)">+</button>
+            </div>
+            <div class="cart-item-total">${SK.price(item.price * item.qty)}</div>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeItem('${item.id}')" title="Remove">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m5 0V4h4v2"/></svg>
+        </button>
+      </div>`;
+    }).join('');
+
+    // Summary lines
+    document.getElementById('summaryLines').innerHTML = cart.map(item => `
+      <div class="summary-row">
+        <span>${item.name} ×${item.qty}</span>
+        <span>${SK.price(item.price * item.qty)}</span>
+      </div>`).join('');
+
+    document.getElementById('cartTotal').textContent = SK.price(SK.cartTotal());
+  }
+
+  function changeQty(id, delta) {
+    SK.changeQty(id, delta);
+    renderCart();
+  }
+
+  function removeItem(id) {
+    SK.removeFromCart(id);
+    renderCart();
+  }
+
+  main();
+</script>
+</body>
+</html>
