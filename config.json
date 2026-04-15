@@ -1,0 +1,85 @@
+{
+  "store": {
+    "name": "My Store",
+    "tagline": "Quality products, delivered fast.",
+    "logo": "",
+    "favicon": "",
+    "currency": "USD",
+    "currencySymbol": "$"
+  },
+  "design": {
+    "theme": "dark",
+    "primaryColor": "#6366f1",
+    "accentColor": "#f59e0b",
+    "successColor": "#22c55e",
+    "dangerColor": "#ef4444",
+    "bgColor": "",
+    "cardColor": "",
+    "headingFont": "Syne",
+    "bodyFont": "DM Sans",
+    "borderRadius": "16",
+    "buttonStyle": "pill",
+    "heroStyle": "gradient",
+    "cardHoverEffect": "lift",
+    "productColumns": 4
+  },
+  "announcement": {
+    "enabled": false,
+    "text": "🚚 Free shipping on all orders above $50!",
+    "bgColor": "#f59e0b",
+    "textColor": "#000000"
+  },
+  "hero": {
+    "enabled": true,
+    "headline": "Welcome to My Store",
+    "subheadline": "Discover amazing products at unbeatable prices.",
+    "ctaText": "Shop Now",
+    "ctaUrl": "#products",
+    "backgroundImage": ""
+  },
+  "contact": {
+    "channels": {
+      "whatsapp": "",
+      "telegram": "",
+      "instagram": "",
+      "facebook": "",
+      "email": "",
+      "phone": "",
+      "twitter": ""
+    },
+    "primaryChannel": "whatsapp",
+    "checkoutChannels": ["whatsapp", "telegram", "email"],
+    "orderMessage": "Hi! I want to place an order.",
+    "floatingButton": true,
+    "floatingChannel": "whatsapp"
+  },
+  "checkout": {
+    "paymentMethod": "cod",
+    "deliveryNote": "Our team will contact you to confirm your delivery address and timing.",
+    "showOrderId": true,
+    "thankYouMessage": "Thank you for your order! We will be in touch shortly."
+  },
+  "features": {
+    "search": true,
+    "categories": true,
+    "cart": true,
+    "relatedProducts": true,
+    "productSpecs": true,
+    "stockBadge": true,
+    "floatingContact": true,
+    "recentlyViewed": true
+  },
+  "api": {
+    "imgbbKey": "YOUR_IMGBB_KEY_HERE",
+    "githubToken": "YOUR_GITHUB_TOKEN_HERE",
+    "githubRepo": "username/my-store",
+    "githubBranch": "main"
+  },
+  "admin": {
+    "password": "admin123"
+  },
+  "footer": {
+    "tagline": "Made with love.",
+    "showPoweredBy": true
+  }
+}
