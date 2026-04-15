@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — My Store</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>
+    .breadcrumb { padding:14px 24px; max-width:1280px; margin:0 auto; font-size:13px; color:var(--text3); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .breadcrumb a { color:var(--text2); text-decoration:none; } .breadcrumb a:hover { color:var(--primary); }
+    .breadcrumb span { color:var(--text3); }
+
+    .product-layout { max-width:1280px; margin:0 auto; padding:0 24px 60px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+    @media(max-width:768px){ .product-layout{grid-template-columns:1fr;gap:28px} }
+
+    /* GALLERY */
+    .gallery { position:sticky; top:80px; }
+    .gallery-main { position:relative; aspect-ratio:1; border-radius:var(--radius-lg); overflow:hidden; background:var(--bg2); border:1px solid var(--border); margin-bottom:12px; }
+    .gallery-main img { width:100%; height:100%; object-fit:cover; transition:opacity .25s; }
+    .gallery-main .badge-lg { position:absolute; top:16px; left:16px; background:var(--accent); color:#000; font-size:12px; font-weight:700; padding:4px 12px; border-radius:var(--radius-full); }
+    .gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.55); border:none; color:#fff; width:38px; height:38px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; transition:background .2s; backdrop-filter:blur(4px); }
+    .gallery-arrow:hover { background:var(--primary); }
+    .gallery-arrow-l { left:12px; }
+    .gallery-arrow-r { right:12px; }
+    .gallery-counter { position:absolute; bottom:12px; right:12px; background:rgba(0,0,0,.6); color:#fff; font-size:12px; font-weight:600; padding:3px 10px; border-radius:50px; backdrop-filter:blur(4px); }
+    .gallery-thumbs { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+    .gallery-thumbs::-webkit-scrollbar { height:3px; }
+    .gallery-thumbs::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .thumb { width:70px; height:70px; border-radius:var(--radius-sm); overflow:hidden; cursor:pointer; border:2px solid transparent; transition:border-color .2s; flex-shrink:0; }
+    .thumb img { width:100%; height:100%; object-fit:cover; }
+    .thumb.active { border-color:var(--primary); }
+
+    /* PRODUCT INFO */
+    .product-info { padding-top:8px; }
+    .pi-cat { font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--primary); margin-bottom:10px; }
+    .pi-name { font-family:var(--font-head); font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; letter-spacing:-.5px; line-height:1.15; margin-bottom:16px; }
+    .pi-price-row { display:flex; align-items:baseline; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+    .pi-price { font-family:var(--font-head); font-size:2.4rem; font-weight:800; }
+    .pi-old { font-size:1.1rem; color:var(--text3); text-decoration:line-through; }
+    .pi-save { font-size:.8rem; font-weight:700; background:color-mix(in srgb,var(--success) 15%,transparent); color:var(--success); border:1px solid color-mix(in srgb,var(--success) 25%,transparent); padding:3px 10px; border-radius:var(--radius-full); }
+    .pi-stock { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; margin-bottom:20px; }
+    .pi-stock::before { content:''; width:7px; height:7px; border-radius:50%; background:currentColor; display:inline-block; }
+    .pi-desc { color:var(--text2); font-size:15px; line-height:1.8; margin-bottom:24px; }
+
+    /* QTY */
+    .qty-row { display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+    .qty-label { font-size:13px; font-weight:600; color:var(--text2); }
+    .qty-ctrl { display:flex; align-items:center; gap:0; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-full); overflow:hidden; }
+    .qty-ctrl button { background:none; border:none; color:var(--text); width:38px; height:38px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+    .qty-ctrl button:hover { background:var(--primary); color:#fff; }
+    .qty-ctrl span { min-width:38px; text-align:center; font-weight:700; font-size:15px; }
+
+    .pi-actions { display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+    .pi-actions .btn { flex:1; min-width:140px; justify-content:center; }
+    .pi-actions .btn-buy { background:var(--accent); color:#000; border-radius:var(--radius-full); }
+
+    /* SPECS */
+    .specs-title { font-family:var(--font-head); font-size:1rem; font-weight:700; margin-bottom:12px; }
+    .specs-table { width:100%; border-collapse:collapse; font-size:14px; }
+    .specs-table tr:not(:last-child) td { border-bottom:1px solid var(--border); }
+    .specs-table td { padding:10px 12px; }
+    .specs-table td:first-child { color:var(--text2); font-weight:500; width:40%; }
+    .specs-table td:last-child { font-weight:600; }
+
+    /* RELATED */
+    .related-section { max-width:1280px; margin:0 auto; padding:0 24px 60px; }
+    .related-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; }
+
+    /* TOUCH SWIPE hint */
+    .swipe-hint { position:absolute; bottom:50px; left:50%; transform:translateX(-50%); font-size:11px; color:rgba(255,255,255,.4); pointer-events:none; display:none; }
+    @media(max-width:768px){.swipe-hint{display:block}.gallery{position:static}}
+  </style>
+</head>
+<body>
+<div id="announcementBar"></div>
+<nav id="mainNav"></nav>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a href="./index.html">Home</a>
+  <span>›</span>
+  <span id="bcCat"></span>
+  <span id="bcSep" style="display:none">›</span>
+  <span id="bcName" style="color:var(--text)"></span>
+</div>
+
+<div class="product-layout">
+  <!-- GALLERY -->
+  <div class="gallery" id="gallery">
+    <div class="gallery-main" id="galleryMain">
+      <img id="mainImg" src="" alt="" />
+      <div class="swipe-hint">← swipe →</div>
+      <div class="gallery-counter" id="galleryCounter" style="display:none"></div>
+    </div>
+    <div class="gallery-thumbs" id="thumbs"></div>
+  </div>
+
+  <!-- INFO -->
+  <div class="product-info" id="productInfo">
+    <div class="pi-cat" id="piCat"></div>
+    <h1 class="pi-name" id="piName">Loading…</h1>
+    <div class="pi-price-row">
+      <span class="pi-old" id="piOld" style="display:none"></span>
+      <span class="pi-price" id="piPrice"></span>
+      <span class="pi-save" id="piSave" style="display:none"></span>
+    </div>
+    <div class="pi-stock" id="piStock"></div>
+    <div class="pi-desc" id="piDesc"></div>
+
+    <div class="qty-row">
+      <span class="qty-label">Quantity</span>
+      <div class="qty-ctrl">
+        <button onclick="changeQty(-1)">−</button>
+        <span id="qtyVal">1</span>
+        <button onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+
+    <div class="pi-actions">
+      <button class="btn btn-primary" id="addCartBtn" onclick="addToCartAction()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Add to Cart
+      </button>
+      <a href="./cart.html" class="btn btn-buy" id="buyNowBtn" onclick="buyNow(event)">Buy Now</a>
+    </div>
+
+    <!-- SPECS -->
+    <div id="specsWrap" style="display:none">
+      <div class="specs-title">Specifications</div>
+      <table class="specs-table" id="specsTable"></table>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED -->
+<div class="related-section" id="relatedSection" style="display:none">
+  <p class="section-label">More Like This</p>
+  <h2 class="section-title">Related Products</h2>
+  <div class="related-grid" id="relatedGrid"></div>
+</div>
+
+<footer>
+  <span id="footerTagline"></span>
+  <span id="poweredBy"> · Built with <a href="https://github.com/IAMBOYYY/storefront-kit" target="_blank">StorefrontKit</a></span>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  const productId = new URLSearchParams(location.search).get('id');
+  let currentProduct = null;
+  let currentImageIdx = 0;
+  let qty = 1;
+  let images = [];
+
+  async function main() {
+    await SK.init();
+    SK.renderNav();
+    if (!productId) { window.location.href = './index.html'; return; }
+    await SK.loadProducts();
+    currentProduct = SK.products.find(p => p.id === productId);
+    if (!currentProduct) { window.location.href = './index.html'; return; }
+    SK.addRecentlyViewed(productId);
+    renderProduct();
+    renderRelated();
+    const ft = SK.config.footer || {};
+    document.getElementById('footerTagline').textContent = ft.tagline || '';
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+    document.title = `${currentProduct.name} — ${SK.config.store?.name || 'My Store'}`;
+  }
+
+  function renderProduct() {
+    const p = currentProduct;
+    images = SK.getProductImages(p);
+
+    // Breadcrumb
+    if (p.category) {
+      document.getElementById('bcCat').textContent = p.category;
+      document.getElementById('bcSep').style.display = '';
+    }
+    document.getElementById('bcName').textContent = p.name;
+
+    // Gallery
+    buildGallery();
+
+    // Info
+    document.getElementById('piCat').textContent = p.category || '';
+    document.getElementById('piName').textContent = p.name;
+
+    if (p.oldPrice) {
+      document.getElementById('piOld').textContent = SK.price(p.oldPrice);
+      document.getElementById('piOld').style.display = '';
+      const saved = Math.round((1 - p.price/p.oldPrice)*100);
+      document.getElementById('piSave').textContent = `Save ${saved}%`;
+      document.getElementById('piSave').style.display = '';
+    }
+    document.getElementById('piPrice').textContent = SK.price(p.price);
+
+    const stock = SK.stockLabel(p.stock || 'in_stock');
+    const stockEl = document.getElementById('piStock');
+    stockEl.textContent = stock.label;
+    stockEl.className = 'pi-stock ' + stock.cls;
+
+    document.getElementById('piDesc').textContent = p.description || '';
+
+    // Disable add if OOS
+    if (p.stock === 'out_of_stock') {
+      document.getElementById('addCartBtn').disabled = true;
+      document.getElementById('addCartBtn').style.opacity = '0.5';
+      document.getElementById('buyNowBtn').style.display = 'none';
+    }
+
+    // Specs
+    const specs = p.specs || {};
+    const specKeys = Object.keys(specs);
+    if (SK.config.features?.productSpecs !== false && specKeys.length) {
+      document.getElementById('specsWrap').style.display = '';
+      document.getElementById('specsTable').innerHTML = specKeys.map(k => `<tr><td>${k}</td><td>${specs[k]}</td></tr>`).join('');
+    }
+  }
+
+  function buildGallery() {
+    const mainImg = document.getElementById('mainImg');
+    mainImg.src = images[0];
+    mainImg.alt = currentProduct.name;
+
+    const counter = document.getElementById('galleryCounter');
+    if (images.length > 1) {
+      counter.style.display = '';
+      counter.textContent = `1 / ${images.length}`;
+
+      // Arrows
+      const gm = document.getElementById('galleryMain');
+      const arL = document.createElement('button');
+      arL.className = 'gallery-arrow gallery-arrow-l';
+      arL.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';
+      arL.onclick = () => setImage(currentImageIdx - 1);
+      const arR = document.createElement('button');
+      arR.className = 'gallery-arrow gallery-arrow-r';
+      arR.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
+      arR.onclick = () => setImage(currentImageIdx + 1);
+      gm.appendChild(arL); gm.appendChild(arR);
+
+      // Thumbnails
+      const thumbsEl = document.getElementById('thumbs');
+      thumbsEl.innerHTML = images.map((img, i) => `
+        <div class="thumb ${i===0?'active':''}" onclick="setImage(${i})">
+          <img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/70x70/1a1a26/555570?text=?'" />
+        </div>`).join('');
+
+      // Touch swipe
+      let startX = 0;
+      const gm2 = document.getElementById('galleryMain');
+      gm2.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+      gm2.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) setImage(currentImageIdx + (dx < 0 ? 1 : -1));
+      });
+    }
+
+    // Badge
+    if (currentProduct.badge) {
+      const gm = document.getElementById('galleryMain');
+      const b = document.createElement('span');
+      b.className = 'badge-lg';
+      b.textContent = currentProduct.badge;
+      gm.appendChild(b);
+    }
+  }
+
+  function setImage(idx) {
+    currentImageIdx = ((idx % images.length) + images.length) % images.length;
+    const img = document.getElementById('mainImg');
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = images[currentImageIdx]; img.style.opacity = '1'; }, 150);
+    document.getElementById('galleryCounter').textContent = `${currentImageIdx+1} / ${images.length}`;
+    document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentImageIdx));
+    document.querySelectorAll('.thumb')[currentImageIdx]?.scrollIntoView({ behavior:'smooth', inline:'nearest', block:'nearest' });
+  }
+
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qtyVal').textContent = qty;
+  }
+
+  function addToCartAction() {
+    if (!currentProduct || currentProduct.stock === 'out_of_stock') return;
+    SK.addToCart(currentProduct, qty);
+    const btn = document.getElementById('addCartBtn');
+    btn.textContent = '✓ Added!';
+    btn.style.background = 'var(--success)';
+    setTimeout(() => {
+      btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Add to Cart`;
+      btn.style.background = '';
+    }, 1800);
+  }
+
+  function buyNow(e) {
+    e.preventDefault();
+    if (!currentProduct || currentProduct.stock === 'out_of_stock') return;
+    SK.addToCart(currentProduct, qty);
+    window.location.href = './checkout.html';
+  }
+
+  function renderRelated() {
+    if (!SK.config.features?.relatedProducts) return;
+    const p = currentProduct;
+    const related = SK.products.filter(x => x.id !== p.id && x.category === p.category).slice(0, 4);
+    if (!related.length) return;
+    const sec = document.getElementById('relatedSection');
+    sec.style.display = '';
+    document.getElementById('relatedGrid').innerHTML = related.map(r => {
+      const img = SK.getProductImages(r)[0];
+      return `
+      <div class="product-card" onclick="window.location.href='./product.html?id=${r.id}'" style="cursor:pointer">
+        <div class="product-img-wrap" style="aspect-ratio:1;background:var(--bg3);overflow:hidden;border-radius:var(--radius-md) var(--radius-md) 0 0">
+          <img src="${img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.src='https://placehold.co/200x200/1a1a26/555570?text=?'" />
+        </div>
+        <div class="product-body">
+          <div class="product-name" style="font-size:.85rem">${r.name}</div>
+          <div class="product-price" style="font-size:1rem;margin-top:6px">${SK.price(r.price)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  main();
+</script>
+</body>
+</html>
