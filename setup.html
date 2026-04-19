@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Wizard — StorefrontKit</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root { --primary:#6366f1; --accent:#f59e0b; --bg:#0a0a0f; --bg2:#12121a; --bg3:#1a1a26; --border:rgba(255,255,255,0.07); --text:#f0f0f8; --text2:#8888aa; --text3:#555570; --font-head:'Syne',sans-serif; --font-body:'DM Sans',sans-serif; }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-body); padding:32px 20px 60px; min-height:100vh; }
+    .page { max-width:640px; margin:0 auto; }
+    .wiz-logo { font-family:var(--font-head); font-size:1rem; font-weight:800; color:var(--primary); display:block; text-align:center; margin-bottom:24px; }
+    .wiz-header { text-align:center; margin-bottom:40px; }
+    .wiz-header h1 { font-family:var(--font-head); font-size:clamp(1.8rem,5vw,2.6rem); font-weight:800; letter-spacing:-1px; margin-bottom:10px; }
+    .wiz-header p { color:var(--text2); font-size:14px; }
+    /* PROGRESS */
+    .progress { display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:40px; }
+    .pdot { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; font-family:var(--font-head); background:var(--bg3); border:1px solid var(--border); color:var(--text3); transition:all .3s; }
+    .pdot.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 0 16px color-mix(in srgb,var(--primary) 50%,transparent); }
+    .pdot.done { background:color-mix(in srgb,var(--primary) 18%,transparent); border-color:color-mix(in srgb,var(--primary) 35%,transparent); color:var(--primary); }
+    .pline { width:36px; height:2px; background:var(--border); }
+    .pline.done { background:color-mix(in srgb,var(--primary) 40%,transparent); }
+    /* STEPS */
+    .step { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:30px; display:none; }
+    .step.active { display:block; animation:fadeUp .25s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .step-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--primary); margin-bottom:6px; }
+    .step-title { font-family:var(--font-head); font-size:1.4rem; font-weight:800; margin-bottom:6px; }
+    .step-desc { color:var(--text2); font-size:13px; margin-bottom:22px; line-height:1.6; }
+    /* FORM */
+    .frow { margin-bottom:14px; }
+    .frow label { display:block; font-size:12px; font-weight:600; color:var(--text2); margin-bottom:5px; }
+    .frow label sub { color:var(--text3); font-size:11px; }
+    .fi, .fsel { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:var(--font-body); font-size:14px; outline:none; transition:border-color .2s; }
+    .fi:focus, .fsel:focus { border-color:var(--primary); }
+    .fi::placeholder { color:var(--text3); }
+    .fsel { cursor:pointer; }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:480px){.two{grid-template-columns:1fr}}
+    .color-row { display:flex; gap:8px; }
+    .color-row .fi { flex:1; }
+    .cpick { width:44px; height:44px; padding:2px; border-radius:10px; border:1px solid var(--border); background:var(--bg3); cursor:pointer; }
+    .hint { background:color-mix(in srgb,var(--accent) 10%,transparent); border:1px solid color-mix(in srgb,var(--accent) 25%,transparent); border-radius:10px; padding:12px 14px; font-size:12px; line-height:1.6; margin-bottom:14px; color:var(--text2); }
+    .hint strong { color:var(--accent); }
+    .toggle-row { display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--border); }
+    .toggle-row:last-child { border-bottom:none; }
+    .toggle-label { font-size:14px; }
+    .toggle-sub { font-size:11px; color:var(--text3); }
+    .toggle { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; position:absolute; }
+    .ttrack { position:absolute; inset:0; background:var(--bg3); border-radius:50px; cursor:pointer; transition:background .2s; border:1px solid var(--border); }
+    .toggle input:checked + .ttrack { background:var(--primary); border-color:var(--primary); }
+    .ttrack::after { content:''; position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:2px; left:2px; transition:transform .2s; }
+    .toggle input:checked + .ttrack::after { transform:translateX(18px); }
+    .channels-section { margin-top:6px; }
+    .channel-input-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .channel-icon { font-size:18px; width:28px; text-align:center; }
+    .channel-label-txt { font-size:13px; font-weight:600; width:90px; flex-shrink:0; color:var(--text2); }
+    .channel-input-row .fi { flex:1; }
+    /* NAV */
+    .step-nav { display:flex; justify-content:space-between; margin-top:26px; }
+    .btn-back { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:10px 20px; border-radius:50px; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font-body); transition:color .2s; }
+    .btn-back:hover { color:var(--text); }
+    .btn-next { background:var(--primary); color:#fff; border:none; border-radius:50px; padding:11px 26px; font-size:13px; font-weight:700; font-family:var(--font-head); cursor:pointer; display:flex; align-items:center; gap:6px; transition:opacity .2s; box-shadow:0 4px 20px color-mix(in srgb,var(--primary) 40%,transparent); }
+    .btn-next:hover { opacity:.9; }
+    /* RESULT */
+    .result { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:32px; text-align:center; display:none; }
+    .result-icon { font-size:48px; margin-bottom:14px; }
+    .result h2 { font-family:var(--font-head); font-size:1.8rem; font-weight:800; margin-bottom:10px; }
+    .result p { color:var(--text2); font-size:13px; line-height:1.7; margin-bottom:20px; }
+    .json-out { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:18px; text-align:left; font-family:monospace; font-size:11px; line-height:1.6; color:var(--text2); max-height:220px; overflow-y:auto; margin-bottom:18px; white-space:pre; }
+    .dl-btn { width:100%; padding:13px; background:var(--primary); color:#fff; border:none; border-radius:50px; font-size:.95rem; font-weight:700; font-family:var(--font-head); cursor:pointer; margin-bottom:8px; }
+    .cp-btn { width:100%; padding:11px; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:50px; font-size:13px; cursor:pointer; font-family:var(--font-body); }
+    .next-steps { text-align:left; margin-top:22px; }
+    .ns-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; font-size:13px; color:var(--text2); line-height:1.5; }
+    .ns-num { background:var(--primary); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <span class="wiz-logo">⚡ StorefrontKit</span>
+  <div class="wiz-header">
+    <h1>Setup Your Store</h1>
+    <p>Fill in a few details and get your <code>config.json</code> ready in minutes.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress" id="prog">
+    <div class="pdot active" id="d1">1</div><div class="pline" id="l1"></div>
+    <div class="pdot" id="d2">2</div><div class="pline" id="l2"></div>
+    <div class="pdot" id="d3">3</div><div class="pline" id="l3"></div>
+    <div class="pdot" id="d4">4</div><div class="pline" id="l4"></div>
+    <div class="pdot" id="d5">5</div>
+  </div>
+
+  <!-- STEP 1: Store -->
+  <div class="step active" id="s1">
+    <div class="step-label">Step 1 of 5</div>
+    <div class="step-title">Store Identity</div>
+    <div class="step-desc">Basic information about your store.</div>
+    <div class="frow"><label>Store Name *</label><input class="fi" id="s1name" placeholder="e.g. Vectra Electronics" /></div>
+    <div class="frow"><label>Tagline</label><input class="fi" id="s1tag" placeholder="Quality electronics, delivered fast." /></div>
+    <div class="two">
+      <div class="frow"><label>Currency Code</label><input class="fi" id="s1cur" value="USD" placeholder="USD" /></div>
+      <div class="frow"><label>Currency Symbol</label><input class="fi" id="s1sym" value="$" placeholder="$" /></div>
+    </div>
+    <div class="step-nav"><div></div><button class="btn-next" onclick="go(2)">Next →</button></div>
+  </div>
+
+  <!-- STEP 2: Design -->
+  <div class="step" id="s2">
+    <div class="step-label">Step 2 of 5</div>
+    <div class="step-title">Design & Theme</div>
+    <div class="step-desc">These get applied as CSS variables — your AI can change any of these later.</div>
+    <div class="two">
+      <div class="frow"><label>Theme</label><select class="fsel" id="s2theme"><option value="dark">Dark</option><option value="light">Light</option></select></div>
+      <div class="frow"><label>Button Style</label><select class="fsel" id="s2btn"><option value="pill">Pill (rounded)</option><option value="rounded">Rounded</option><option value="sharp">Sharp</option></select></div>
+    </div>
+    <div class="frow"><label>Primary Color</label><div class="color-row"><input class="fi" id="s2color" value="#6366f1" oninput="sync('s2color','s2cp');updatePrimary(this.value)" /><input type="color" class="cpick" id="s2cp" value="#6366f1" oninput="sync('s2cp','s2color');updatePrimary(this.value)" /></div></div>
+    <div class="frow"><label>Accent Color</label><div class="color-row"><input class="fi" id="s2acc" value="#f59e0b" oninput="sync('s2acc','s2acp')" /><input type="color" class="cpick" id="s2acp" value="#f59e0b" oninput="sync('s2acp','s2acc')" /></div></div>
+    <div class="frow"><label>Heading Font <sub>(Google Fonts name)</sub></label><input class="fi" id="s2hf" value="Syne" placeholder="Syne" /></div>
+    <div class="frow"><label>Body Font</label><input class="fi" id="s2bf" value="DM Sans" placeholder="DM Sans" /></div>
+    <div class="step-nav"><button class="btn-back" onclick="go(1)">← Back</button><button class="btn-next" onclick="go(3)">Next →</button></div>
+  </div>
+
+  <!-- STEP 3: Contact -->
+  <div class="step" id="s3">
+    <div class="step-label">Step 3 of 5</div>
+    <div class="step-title">Contact Channels</div>
+    <div class="step-desc">Add the channels you want customers to use. Leave blank to disable. You can add all or just one.</div>
+    <div class="channels-section">
+      <div class="channel-input-row"><span class="channel-icon">💬</span><span class="channel-label-txt">WhatsApp</span><input class="fi" id="cwa" placeholder="+911234567890 (with country code)" /></div>
+      <div class="channel-input-row"><span class="channel-icon">✈️</span><span class="channel-label-txt">Telegram</span><input class="fi" id="ctg" placeholder="@username or +phone" /></div>
+      <div class="channel-input-row"><span class="channel-icon">📸</span><span class="channel-label-txt">Instagram</span><input class="fi" id="cig" placeholder="@yourusername" /></div>
+      <div class="channel-input-row"><span class="channel-icon">👍</span><span class="channel-label-txt">Facebook</span><input class="fi" id="cfb" placeholder="facebook.com/yourpage" /></div>
+      <div class="channel-input-row"><span class="channel-icon">📧</span><span class="channel-label-txt">Email</span><input class="fi" id="cem" placeholder="hello@mystore.com" type="email" /></div>
+      <div class="channel-input-row"><span class="channel-icon">📞</span><span class="channel-label-txt">Phone</span><input class="fi" id="cph" placeholder="+911234567890" /></div>
+      <div class="channel-input-row"><span class="channel-icon">🐦</span><span class="channel-label-txt">Twitter/X</span><input class="fi" id="ctx" placeholder="@username" /></div>
+    </div>
+    <div class="frow" style="margin-top:16px"><label>Primary/Floating Contact</label><select class="fsel" id="cprim"><option value="whatsapp">WhatsApp</option><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="email">Email</option><option value="phone">Phone</option></select></div>
+    <div class="frow"><label>Order Message</label><input class="fi" id="cmsg" value="Hi! I want to place an order." /></div>
+    <div class="step-nav"><button class="btn-back" onclick="go(2)">← Back</button><button class="btn-next" onclick="go(4)">Next →</button></div>
+  </div>
+
+  <!-- STEP 4: API Keys -->
+  <div class="step" id="s4">
+    <div class="step-label">Step 4 of 5</div>
+    <div class="step-title">API Keys</div>
+    <div class="step-desc">These power the admin dashboard — product storage and image uploads.</div>
+    <div class="hint">🔑 <strong>GitHub Token:</strong> Settings → Developer settings → Tokens (fine-grained) → New token → Contents: Read & Write.<br><br>🖼️ <strong>ImgBB Key:</strong> Free at <strong>api.imgbb.com</strong> — just sign up and copy your key.</div>
+    <div class="frow"><label>GitHub Repo <sub>username/repo-name</sub></label><input class="fi" id="s4repo" placeholder="johndoe/my-store" /></div>
+    <div class="frow"><label>GitHub Personal Access Token</label><input class="fi" id="s4token" placeholder="github_pat_…" type="password" /></div>
+    <div class="frow"><label>ImgBB API Key</label><input class="fi" id="s4imgbb" placeholder="your-imgbb-api-key" /></div>
+    <div class="frow"><label>Admin Password <sub>(for admin.html)</sub></label><input class="fi" id="s4pw" placeholder="Choose a strong password" type="password" /></div>
+    <div class="step-nav"><button class="btn-back" onclick="go(3)">← Back</button><button class="btn-next" onclick="go(5)">Next →</button></div>
+  </div>
+
+  <!-- STEP 5: Hero & Features -->
+  <div class="step" id="s5">
+    <div class="step-label">Step 5 of 5</div>
+    <div class="step-title">Hero & Features</div>
+    <div class="step-desc">Customize the homepage hero and toggle features on/off.</div>
+    <div class="frow"><label>Hero Headline</label><input class="fi" id="s5h" placeholder="Welcome to My Store" /></div>
+    <div class="frow"><label>Hero Subheadline</label><input class="fi" id="s5sub" placeholder="Discover amazing products at unbeatable prices." /></div>
+    <div class="frow"><label>Hero Button Text</label><input class="fi" id="s5cta" value="Shop Now" /></div>
+    <div style="margin-top:18px">
+      <div class="toggle-row"><div><div class="toggle-label">Cart + Checkout</div><div class="toggle-sub">Full cart → checkout flow</div></div><label class="toggle"><input type="checkbox" id="f-cart" checked><div class="ttrack"></div></label></div>
+      <div class="toggle-row"><div><div class="toggle-label">Search Bar</div></div><label class="toggle"><input type="checkbox" id="f-search" checked><div class="ttrack"></div></label></div>
+      <div class="toggle-row"><div><div class="toggle-label">Category Filters</div></div><label class="toggle"><input type="checkbox" id="f-cats" checked><div class="ttrack"></div></label></div>
+      <div class="toggle-row"><div><div class="toggle-label">Related Products</div></div><label class="toggle"><input type="checkbox" id="f-related" checked><div class="ttrack"></div></label></div>
+      <div class="toggle-row"><div><div class="toggle-label">Product Specs Table</div></div><label class="toggle"><input type="checkbox" id="f-specs" checked><div class="ttrack"></div></label></div>
+      <div class="toggle-row"><div><div class="toggle-label">Floating Contact Button</div><div class="toggle-sub">Quick contact widget on all pages</div></div><label class="toggle"><input type="checkbox" id="f-float" checked><div class="ttrack"></div></label></div>
+    </div>
+    <div class="step-nav"><button class="btn-back" onclick="go(4)">← Back</button><button class="btn-next" onclick="generate()">Generate ✓</button></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+    <div class="result-icon">🎉</div>
+    <h2>Your config.json is ready!</h2>
+    <p>Download and upload it to the root of your GitHub repo. Your store updates in ~30 seconds.</p>
+    <div class="json-out" id="jsonOut"></div>
+    <button class="dl-btn" onclick="download()">⬇ Download config.json</button>
+    <button class="cp-btn" onclick="copyJSON()">Copy to Clipboard</button>
+    <div class="next-steps">
+      <div class="ns-item"><div class="ns-num">1</div><div>Upload <strong>config.json</strong> to your GitHub repo root (replace existing)</div></div>
+      <div class="ns-item"><div class="ns-num">2</div><div>Settings → Pages → Source → <strong>GitHub Actions</strong> → Save</div></div>
+      <div class="ns-item"><div class="ns-num">3</div><div>Your store goes live at <strong>yourusername.github.io/repo-name</strong></div></div>
+      <div class="ns-item"><div class="ns-num">4</div><div>Visit <strong>/admin.html</strong> → log in → add products with multi-image upload</div></div>
+    </div>
+  </div>
+
+</div>
+<script>
+  let generated = null;
+
+  // ── PASSWORD ENCODING (4-step chain — must match admin.html exactly) ─
+  function encodePassword(pw) {
+    let s = pw.split('').reverse().join('');
+    let xored = s.split('').map((c, i) =>
+      String.fromCharCode(c.charCodeAt(0) ^ (i + 13))
+    ).join('');
+    let hex = xored.split('').map(c =>
+      c.charCodeAt(0).toString(16).padStart(2, '0')
+    ).join('');
+    return btoa(hex);
+  }
+  function v(id) { return document.getElementById(id)?.value?.trim()||''; }
+  function chk(id) { return document.getElementById(id)?.checked??true; }
+  function sync(from, to) { const val = document.getElementById(from).value; document.getElementById(to).value = val; }
+  function updatePrimary(hex) { document.documentElement.style.setProperty('--primary', hex); }
+
+  function go(n) {
+    const total = 5;
+    for (let i=1;i<=total;i++) {
+      document.getElementById('s'+i)?.classList.toggle('active', i===n);
+      const dot = document.getElementById('d'+i);
+      if (i<n){dot.className='pdot done';dot.textContent='✓';}
+      else if(i===n){dot.className='pdot active';dot.textContent=i;}
+      else{dot.className='pdot';dot.textContent=i;}
+      if(i<total) document.getElementById('l'+i).className='pline'+(i<n?' done':'');
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function generate() {
+    const channels = {};
+    const channelMap = {wa:'whatsapp',tg:'telegram',ig:'instagram',fb:'facebook',em:'email',ph:'phone',tx:'twitter'};
+    const checkoutChs = [];
+    Object.entries(channelMap).forEach(([k,name]) => {
+      const val = v('c'+k);
+      if (val) { channels[name]=val; checkoutChs.push(name); }
+    });
+
+    generated = {
+      store:{ name:v('s1name')||'My Store', tagline:v('s1tag'), logo:'', favicon:'', currency:v('s1cur')||'USD', currencySymbol:v('s1sym')||'$' },
+      design:{ theme:document.getElementById('s2theme').value, primaryColor:v('s2color')||'#6366f1', accentColor:v('s2acc')||'#f59e0b', successColor:'#22c55e', dangerColor:'#ef4444', bgColor:'', cardColor:'', headingFont:v('s2hf')||'Syne', bodyFont:v('s2bf')||'DM Sans', borderRadius:'16', buttonStyle:document.getElementById('s2btn').value, heroStyle:'gradient', cardHoverEffect:'lift', productColumns:4 },
+      announcement:{ enabled:false, text:'🚚 Free shipping on orders above $50!', bgColor:'#f59e0b', textColor:'#000000' },
+      hero:{ enabled:true, headline:v('s5h')||'Welcome to My Store', subheadline:v('s5sub'), ctaText:v('s5cta')||'Shop Now', ctaUrl:'#products', backgroundImage:'' },
+      contact:{ channels, primaryChannel:v('cprim')||'whatsapp', checkoutChannels:checkoutChs.slice(0,4), orderMessage:v('cmsg')||'Hi! I want to place an order.', floatingButton:chk('f-float'), floatingChannel:v('cprim')||'whatsapp' },
+      checkout:{ paymentMethod:'cod', deliveryNote:'Our team will contact you to confirm your delivery address and timing.', showOrderId:true, thankYouMessage:'Thank you for your order! We will be in touch shortly.' },
+      features:{ search:chk('f-search'), categories:chk('f-cats'), cart:chk('f-cart'), relatedProducts:chk('f-related'), productSpecs:chk('f-specs'), stockBadge:true, floatingContact:chk('f-float'), recentlyViewed:true },
+      api:{ imgbbKey:v('s4imgbb')||'YOUR_IMGBB_KEY_HERE', githubToken:v('s4token')||'YOUR_GITHUB_TOKEN_HERE', githubRepo:v('s4repo')||'username/my-store', githubBranch:'main' },
+      admin:{ adminHash: encodePassword(v('s4pw')||'admin123') },
+      footer:{ tagline:v('s1name')||'My Store', showPoweredBy:true }
+    };
+
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+    for(let i=1;i<=5;i++){const d=document.getElementById('d'+i);d.className='pdot done';d.textContent='✓';if(i<5)document.getElementById('l'+i).className='pline done';}
+    document.getElementById('result').style.display='block';
+    document.getElementById('jsonOut').textContent = JSON.stringify(generated, null, 2);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function download() {
+    if (!generated) return;
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(generated,null,2)],{type:'application/json'})); a.download='config.json'; a.click();
+  }
+  function copyJSON() {
+    if (!generated) return;
+    navigator.clipboard.writeText(JSON.stringify(generated,null,2)).then(()=>{
+      const b = document.querySelector('.cp-btn'); b.textContent='✓ Copied!';
+      setTimeout(()=>b.textContent='Copy to Clipboard',2000);
+    });
+  }
+</script>
+</body>
+</html>
