@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Pure</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--pu-ink:#26321f;--pu-green:#4a5e3a;--pu-greendark:#36462a;--pu-cream:#f7f5ee;--pu-card:#eef0e4;--pu-mute:#6c7261;--pu-line:#e0e2d4;--pu-success:#16803d}
+  body{font-family:'Inter',sans-serif;color:var(--pu-ink);background:var(--pu-cream)}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .pu-nav{position:sticky;top:0;z-index:300;background:var(--pu-cream);border-bottom:1px solid var(--pu-line);height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 36px}
+  .pu-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;letter-spacing:1px}
+  .pu-backlink{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;color:#444}
+  .pu-backlink svg{width:14px;height:14px}
+
+  .pu-wrap{max-width:740px;margin:0 auto;padding:46px 36px 90px}
+  .pu-steps{display:flex;gap:8px;margin-bottom:26px;font-size:12px;font-weight:600;color:var(--pu-mute)}
+  .pu-steps span.active{color:var(--pu-ink);font-weight:700}
+  .pu-card{border:1px solid var(--pu-line);border-radius:14px;padding:22px;margin-bottom:18px;background:#fff}
+  .pu-card h2{font-family:'Inter',sans-serif;font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .pu-card h2 .num{width:22px;height:22px;background:var(--pu-greendark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+  .pu-oline{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--pu-line);color:#333}
+  .pu-ototal{display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;padding-top:14px}
+
+  .pu-codbox{display:flex;align-items:center;gap:14px;background:var(--pu-card);padding:16px;border-radius:10px}
+  .pu-codbox svg{width:28px;height:28px;flex-shrink:0;color:var(--pu-success)}
+  .pu-codbox strong{display:block;font-size:14px}
+  .pu-codbox span{font-size:12px;color:var(--pu-mute)}
+
+  .pu-channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .pu-chanbtn{display:flex;align-items:center;gap:10px;padding:13px 16px;border:none;border-radius:30px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none}
+  .pu-chanbtn svg{width:16px;height:16px}
+  .pu-chanarrow{margin-left:auto;width:11px;height:11px}
+  .pu-empty{text-align:center;padding:80px 20px;color:var(--pu-mute)}
+  .pu-empty a{display:inline-block;margin-top:18px;background:var(--pu-greendark);color:#fff;padding:14px 28px;border-radius:30px;font-weight:700;font-size:13px}
+  .pu-orderid{background:var(--pu-card);padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+  .pu-orderid svg{width:14px;height:14px}
+
+  footer.pu-foot{background:var(--pu-greendark);color:#cfd6c5;padding:26px 36px;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+<nav class="pu-nav">
+  <a href="./index4.html" class="pu-logo" id="navLogoWrap" data-store-name>PURE</a>
+  <a href="./cart4.html" class="pu-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Edit Cart</a>
+</nav>
+
+<div class="pu-wrap">
+  <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.3rem);font-weight:700;margin-bottom:8px">Checkout</h1>
+  <div class="pu-steps"><span class="active">1. Cart</span>&nbsp;&middot;&nbsp;<span class="active">2. Checkout</span>&nbsp;&middot;&nbsp;<span>3. Confirmed</span></div>
+
+  <div id="checkoutEmpty" style="display:none" class="pu-empty">
+    <div>Your cart is empty — add something first.</div>
+    <a href="./index4.html">Browse Products</a>
+  </div>
+
+  <div id="checkoutContent">
+    <div class="pu-orderid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 12.6 12 21.2 2.8 12 11.4 3.4H18a2 2 0 0 1 2 2v7.2z"/><circle cx="14.5" cy="9.5" r="1.3"/></svg> Order ID: <span id="orderIdVal"></span></div>
+
+    <div class="pu-card"><h2><span class="num">1</span> Order Summary</h2><div id="orderLines"></div><div class="pu-ototal"><span>Total</span><span id="orderTotal"></span></div></div>
+
+    <div class="pu-card">
+      <h2><span class="num">2</span> Payment</h2>
+      <div class="pu-codbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+        <div><strong>Cash on Delivery</strong><span>Pay when your order arrives at your door</span></div>
+      </div>
+    </div>
+
+    <div class="pu-card">
+      <h2><span class="num">3</span> Send Your Order</h2>
+      <p style="font-size:13px;color:var(--pu-mute);margin-bottom:16px">Tap a channel below to send us your order details — we'll confirm right away.</p>
+      <div class="pu-channels" id="channelsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="pu-foot">&copy; <span id="yr"></span> <span data-store-name>Pure</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function renderOrderLines(cart){
+    document.getElementById('orderLines').innerHTML = cart.map(i=>`<div class="pu-oline"><span>${i.name} &times;${i.qty}</span><span>${SK.price(i.price*i.qty)}</span></div>`).join('');
+    document.getElementById('orderTotal').textContent = SK.price(SK.cartTotal());
+  }
+  function renderChannels(){
+    const grid = document.getElementById('channelsGrid');
+    const channels = SK.config.contact?.channels || {};
+    const checkoutChannels = SK.config.contact?.checkoutChannels || Object.keys(channels);
+    const orderMsg = SK.buildOrderMessage();
+    const enabled = checkoutChannels.filter(ch => channels[ch]);
+    if (!enabled.length){
+      grid.innerHTML = `<div style="grid-column:1/-1;font-size:13px;color:var(--pu-mute)">No contact channels configured yet. <a href="./admin.html" style="text-decoration:underline">Set them up</a>.</div>`;
+      return;
+    }
+    grid.innerHTML = enabled.map(ch=>{
+      const meta = SK.CHANNEL_META[ch] || { label: ch, icon: SK.ICONS.email, bg:'#6366f1' };
+      const url = SK.contactUrl(ch, orderMsg);
+      if (!url) return '';
+      return `<a href="${url}" target="_blank" class="pu-chanbtn" style="background:${meta.bg}"><span style="width:16px;height:16px;display:flex">${meta.icon}</span><span>${meta.label}</span><span class="pu-chanarrow">${SK.ICONS.arrow}</span></a>`;
+    }).join('');
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    document.getElementById('orderIdVal').textContent = SK._getOrderId();
+    const cart = SK.getCart();
+    if (!cart.length){
+      document.getElementById('checkoutEmpty').style.display = '';
+      document.getElementById('checkoutContent').style.display = 'none';
+      SK.reveal();
+      return;
+    }
+    renderOrderLines(cart);
+    renderChannels();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>

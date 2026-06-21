@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product — Essentials</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--es-ink:#111;--es-mute:#777;--es-line:#eaeaea;--es-card:#f7f7f7;--es-paper:#fff;--es-success:#16803d;--es-danger:#b91c1c}
+  body{font-family:'Inter',sans-serif;color:var(--es-ink);background:var(--es-paper)}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .es-bar{background:var(--es-ink);color:#fff;text-align:center;font-size:12px;padding:9px;font-weight:500}
+  .es-nav{position:sticky;top:0;z-index:300;background:var(--es-paper);border-bottom:1px solid var(--es-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .es-logo{font-size:1.4rem;font-weight:800;letter-spacing:-.5px}
+  .es-ibtn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;position:relative}
+  .es-ibtn svg{width:18px;height:18px}
+  [data-cart-count]{position:absolute;top:-2px;right:-2px;background:var(--es-ink);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+  .es-crumbs{max-width:1280px;margin:0 auto;padding:18px 32px 0;font-size:13px;color:var(--es-mute)}
+  .es-crumbs a{text-decoration:underline}
+  .es-pwrap{max-width:1280px;margin:0 auto;padding:24px 32px 70px;display:grid;grid-template-columns:1fr 1fr;gap:60px}
+  @media(max-width:880px){.es-pwrap{grid-template-columns:1fr;gap:24px}}
+
+  .es-mainimg{aspect-ratio:.85;background:var(--es-card);overflow:hidden;border-radius:6px;margin-bottom:10px}
+  .es-mainimg img{width:100%;height:100%;object-fit:cover}
+  .es-thumbs{display:flex;gap:8px}
+  .es-thumb{width:64px;height:64px;border-radius:4px;background:var(--es-card);cursor:pointer;border:2px solid transparent;overflow:hidden}
+  .es-thumb.active{border-color:var(--es-ink)}
+  .es-thumb img{width:100%;height:100%;object-fit:cover}
+
+  .es-info .es-tag{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--es-mute);margin-bottom:10px}
+  .es-info h1{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.5px;margin-bottom:10px}
+  .es-stars{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--es-mute)}
+  .es-stars .row{display:flex;gap:1px}
+  .es-stars .row span{width:13px;height:13px;display:inline-flex}
+  .es-priceline{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+  .es-price{font-size:1.5rem;font-weight:800}
+  .es-old{color:var(--es-mute);text-decoration:line-through;font-size:1rem}
+  .es-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:30px}
+  .stock-in{background:#e9f9ee;color:var(--es-success)} .stock-limited{background:#fff4e0;color:#b45309} .stock-out{background:#fdecec;color:var(--es-danger)}
+  .es-desc{font-size:14px;color:#444;line-height:1.7;margin-bottom:22px}
+
+  .es-optlabel{font-size:13px;font-weight:700;margin-bottom:8px}
+  .es-sizes{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+  .es-size{width:46px;height:42px;border:1px solid var(--es-line);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;background:none}
+  .es-size.active{background:var(--es-ink);color:#fff;border-color:var(--es-ink)}
+
+  .es-actions{display:flex;gap:10px;margin-bottom:26px}
+  .es-addbig{flex:1;background:var(--es-ink);color:#fff;border:none;padding:16px;border-radius:4px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .es-addbig:disabled{opacity:.35;cursor:not-allowed}
+  .es-wish{width:52px;border:1px solid var(--es-line);border-radius:4px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .es-wish svg{width:18px;height:18px}
+
+  .es-trustrow{display:flex;gap:20px;flex-wrap:wrap;border-top:1px solid var(--es-line);padding-top:18px;font-size:12px;color:var(--es-mute)}
+  .es-trustrow span{display:flex;align-items:center;gap:6px}
+  .es-trustrow svg{width:15px;height:15px}
+
+  .es-related{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+  .es-related h2{font-size:1.4rem;font-weight:800;margin-bottom:22px}
+  .es-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
+  .es-card{cursor:pointer}
+  .es-cardimg{aspect-ratio:.85;background:var(--es-card);overflow:hidden;border-radius:4px;margin-bottom:10px}
+  .es-cardimg img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+  .es-card:hover .es-cardimg img{transform:scale(1.05)}
+  .es-cardname{font-size:13px;font-weight:600;margin-bottom:4px}
+  .es-cardprice{font-weight:700;font-size:13px}
+
+  footer.es-foot{border-top:1px solid var(--es-line);padding:26px 32px;text-align:center;font-size:12px;color:var(--es-mute)}
+</style>
+</head>
+<body>
+<div class="es-bar">Free shipping on orders over $99 &middot; Easy 30-day returns</div>
+<nav class="es-nav">
+  <a href="./index3.html" class="es-logo" id="navLogoWrap" data-store-name>ESSENTIALS</a>
+  <a href="./cart3.html" class="es-ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-cart-count style="display:none">0</span></a>
+</nav>
+
+<div class="es-crumbs"><a href="./index3.html">Home</a> / <a href="./index3.html#shop">Shop</a> / <span id="crumbName">Product</span></div>
+
+<div class="es-pwrap">
+  <div>
+    <div class="es-mainimg"><img id="mainImg" src="" alt=""></div>
+    <div class="es-thumbs" id="thumbs"></div>
+  </div>
+  <div class="es-info">
+    <div class="es-tag" id="pCat">Shop</div>
+    <h1 id="pName">Loading…</h1>
+    <div class="es-stars"><span class="row" id="pStarsRow"></span><span id="pReviews"></span></div>
+    <div class="es-priceline">
+      <span class="es-price" id="pPrice"></span>
+      <span class="es-old" id="pOld" style="display:none"></span>
+      <span class="es-pill" id="pStock"></span>
+    </div>
+    <p class="es-desc" id="pDesc"></p>
+
+    <div class="es-optlabel">Size</div>
+    <div class="es-sizes" id="sizeRow">
+      <button class="es-size active" data-size="S">S</button>
+      <button class="es-size" data-size="M">M</button>
+      <button class="es-size" data-size="L">L</button>
+      <button class="es-size" data-size="XL">XL</button>
+    </div>
+
+    <div class="es-actions">
+      <button class="es-addbig" id="addBtn" onclick="addToCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Add to Cart
+      </button>
+      <button class="es-wish" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+    </div>
+
+    <div class="es-trustrow">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping over $99</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg> 30-day returns</span>
+    </div>
+  </div>
+</div>
+
+<div class="es-related"><h2>You May Also Like</h2><div class="es-grid" id="relGrid"></div></div>
+
+<footer class="es-foot">&copy; <span id="yr"></span> <span data-store-name>Essentials</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  const qs = new URLSearchParams(location.search);
+  const productId = parseInt(qs.get('id'));
+  let currentProduct = null, imgs = [];
+
+  document.getElementById('sizeRow').addEventListener('click', e => {
+    const btn = e.target.closest('.es-size'); if (!btn) return;
+    document.querySelectorAll('.es-size').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+
+  function addToCart(){ if (currentProduct) SK.addToCart(currentProduct, 1); }
+  function setMainImg(i){
+    document.getElementById('mainImg').src = imgs[i];
+    document.querySelectorAll('.es-thumb').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  }
+
+  function renderProduct(){
+    const p = currentProduct;
+    imgs = SK.getProductImages(p);
+    document.getElementById('crumbName').textContent = p.name;
+    document.getElementById('pCat').textContent = p.category || 'Shop';
+    document.getElementById('pName').textContent = p.name;
+    document.getElementById('pStarsRow').innerHTML = SK.renderStars(p.rating||4.5,13);
+    document.getElementById('pReviews').textContent = `(${p.reviews||0} reviews)`;
+    document.getElementById('pPrice').textContent = SK.price(p.price);
+    const onSale = p.oldPrice && p.oldPrice > p.price;
+    const oldEl = document.getElementById('pOld');
+    oldEl.style.display = onSale ? '' : 'none';
+    if (onSale) oldEl.textContent = SK.price(p.oldPrice);
+    const stock = SK.stockLabel(p.stock);
+    const stockEl = document.getElementById('pStock');
+    stockEl.textContent = stock.label; stockEl.className = 'es-pill ' + stock.cls;
+    document.getElementById('pDesc').textContent = p.description || '';
+    document.getElementById('thumbs').innerHTML = imgs.map((src,i)=>`<div class="es-thumb ${i===0?'active':''}" onclick="setMainImg(${i})"><img src="${src}" alt=""></div>`).join('');
+    setMainImg(0);
+    if (stock.cls === 'stock-out'){ const b=document.getElementById('addBtn'); b.disabled=true; b.textContent='Out of Stock'; }
+  }
+
+  function renderRelated(){
+    const others = SK.products.filter(p=>p.id!==currentProduct.id && p.category===currentProduct.category).slice(0,4);
+    const list = others.length ? others : SK.products.filter(p=>p.id!==currentProduct.id).slice(0,4);
+    document.getElementById('relGrid').innerHTML = list.map(p=>`
+      <div class="es-card" onclick="location.href='./product3.html?id=${p.id}'">
+        <div class="es-cardimg"><img src="${SK.getProductImages(p)[0]}" alt="${p.name}"></div>
+        <div class="es-cardname">${p.name}</div>
+        <div class="es-cardprice">${SK.price(p.price)}</div>
+      </div>`).join('');
+  }
+
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    if (!productId) { window.location.href = './index3.html'; return; }
+    await SK.loadProducts();
+    currentProduct = SK.products.find(p=>p.id===productId);
+    if (!currentProduct) { window.location.href = './index3.html'; return; }
+    SK.addRecentlyViewed(productId);
+    renderProduct(); renderRelated();
+    document.title = `${currentProduct.name} — Essentials`;
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>

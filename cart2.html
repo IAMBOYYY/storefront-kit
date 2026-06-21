@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — Velocity</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--vlx-ink:#0c0c0c;--vlx-paper:#fff;--vlx-mute:#6b6b6b;--vlx-line:#e7e7e7;--vlx-card:#f5f5f5;--vlx-accent:#ff3b30}
+  body{font-family:'Inter',sans-serif;color:var(--vlx-ink);background:var(--vlx-paper)}
+  h1,h2{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.5px}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .vlx-utility{background:var(--vlx-ink);color:#fff;text-align:center;font-size:11px;font-weight:600;letter-spacing:1.5px;padding:9px 12px;text-transform:uppercase}
+  .vlx-nav{position:sticky;top:0;z-index:300;background:var(--vlx-paper);border-bottom:2px solid var(--vlx-ink);height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+  .vlx-logo{font-family:'Archivo Black',sans-serif;font-size:1.5rem;letter-spacing:-1px}
+  .vlx-backlink{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .vlx-backlink svg{width:14px;height:14px}
+
+  .vlx-wrap{max-width:1000px;margin:0 auto;padding:50px 28px 90px}
+  .vlx-wrap h1{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:30px}
+  .vlx-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:40px}
+  @media(max-width:780px){.vlx-layout{grid-template-columns:1fr}}
+
+  .vlx-line{display:grid;grid-template-columns:90px 1fr auto auto;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--vlx-line)}
+  .vlx-line img{width:90px;height:90px;object-fit:cover;background:var(--vlx-card)}
+  .vlx-lname{font-weight:700;font-size:14px;margin-bottom:6px}
+  .vlx-lprice{font-size:13px;color:var(--vlx-mute);font-weight:600}
+  .vlx-lqty{display:flex;align-items:center;border:1.5px solid var(--vlx-ink)}
+  .vlx-lqty button{width:30px;height:30px;background:none;border:none;font-size:15px;cursor:pointer;font-weight:700}
+  .vlx-lqty span{width:30px;text-align:center;font-weight:700;font-size:13px}
+  .vlx-ltotal{font-weight:800;font-size:14px;text-align:right;min-width:70px}
+  .vlx-remove{background:none;border:none;cursor:pointer;color:var(--vlx-mute);width:16px;height:16px;justify-self:end}
+
+  .vlx-empty{text-align:center;padding:80px 20px;color:var(--vlx-mute)}
+  .vlx-empty svg{width:54px;height:54px;margin-bottom:18px;color:var(--vlx-line)}
+  .vlx-empty a{display:inline-block;margin-top:18px;background:var(--vlx-ink);color:#fff;padding:14px 28px;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+
+  .vlx-summary{border:1.5px solid var(--vlx-ink);padding:26px;height:fit-content}
+  .vlx-summary h2{font-size:1.1rem;margin-bottom:18px}
+  .vlx-srow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;color:var(--vlx-mute);font-weight:600}
+  .vlx-srow.total{color:var(--vlx-ink);font-size:1.2rem;font-weight:800;border-top:1px solid var(--vlx-line);padding-top:14px;margin-top:8px}
+  .vlx-checkoutbtn{width:100%;background:var(--vlx-ink);color:#fff;border:none;padding:17px;font-family:'Archivo Black',sans-serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-top:16px}
+  .vlx-checkoutbtn:hover{opacity:.85}
+  .vlx-note{font-size:12px;color:var(--vlx-mute);margin-top:14px;text-align:center}
+
+  footer.vlx-foot{background:var(--vlx-ink);color:#aaa;padding:30px 28px;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+<div class="vlx-utility">Free shipping on orders over $75 — New drops every Friday</div>
+<nav class="vlx-nav">
+  <a href="./index2.html" class="vlx-logo" id="navLogoWrap" data-store-name>VELOCITY</a>
+  <a href="./index2.html" class="vlx-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Continue Shopping</a>
+</nav>
+
+<div class="vlx-wrap">
+  <h1>Your Cart</h1>
+  <div id="cartLayout"></div>
+</div>
+
+<footer class="vlx-foot">&copy; <span id="yr"></span> <span data-store-name>Velocity</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function lineHTML(item){
+    return `<div class="vlx-line">
+      <img src="${item.image}" alt="${item.name}">
+      <div>
+        <div class="vlx-lname">${item.name}</div>
+        <div class="vlx-lprice">${SK.price(item.price)} each</div>
+      </div>
+      <div class="vlx-lqty">
+        <button onclick="SK.changeQty(${item.id},-1);render()">−</button>
+        <span>${item.qty}</span>
+        <button onclick="SK.changeQty(${item.id},1);render()">+</button>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="vlx-ltotal">${SK.price(item.price*item.qty)}</div>
+        <button class="vlx-remove" onclick="SK.removeFromCart(${item.id});render()" title="Remove">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }
+
+  function render(){
+    const cart = SK.getCart();
+    const wrap = document.getElementById('cartLayout');
+    if (!cart.length){
+      wrap.innerHTML = `<div class="vlx-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <div>Your cart is empty.</div>
+        <a href="./index2.html">Start Shopping</a>
+      </div>`;
+      return;
+    }
+    const total = SK.cartTotal();
+    wrap.innerHTML = `<div class="vlx-layout">
+      <div>${cart.map(lineHTML).join('')}</div>
+      <div class="vlx-summary">
+        <h2>Order Summary</h2>
+        <div class="vlx-srow"><span>Subtotal</span><span>${SK.price(total)}</span></div>
+        <div class="vlx-srow"><span>Shipping</span><span>${total >= 75 ? 'Free' : 'Calculated at checkout'}</span></div>
+        <div class="vlx-srow total"><span>Total</span><span>${SK.price(total)}</span></div>
+        <button class="vlx-checkoutbtn" onclick="location.href='./checkout2.html'">Proceed to Checkout</button>
+        <div class="vlx-note">Taxes calculated at checkout. Cash on Delivery available.</div>
+      </div>
+    </div>`;
+  }
+
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    render();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
