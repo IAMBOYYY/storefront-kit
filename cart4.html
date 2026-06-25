@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — Pure</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--pu-ink:#26321f;--pu-green:#4a5e3a;--pu-greendark:#36462a;--pu-cream:#f7f5ee;--pu-card:#eef0e4;--pu-mute:#6c7261;--pu-line:#e0e2d4}
+  body{font-family:'Inter',sans-serif;color:var(--pu-ink);background:var(--pu-cream)}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:700}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .pu-nav{position:sticky;top:0;z-index:300;background:var(--pu-cream);border-bottom:1px solid var(--pu-line);height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 36px}
+  .pu-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;letter-spacing:1px}
+  .pu-backlink{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;color:#444}
+  .pu-backlink svg{width:14px;height:14px}
+
+  .pu-wrap{max-width:980px;margin:0 auto;padding:46px 36px 90px}
+  .pu-wrap h1{font-size:clamp(1.8rem,4vw,2.4rem);margin-bottom:28px}
+  .pu-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:40px}
+  @media(max-width:780px){.pu-layout{grid-template-columns:1fr}}
+
+  .pu-line{display:grid;grid-template-columns:80px 1fr auto auto;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--pu-line)}
+  .pu-line img{width:80px;height:80px;object-fit:cover;background:var(--pu-card);border-radius:10px}
+  .pu-lname{font-weight:700;font-size:14px;margin-bottom:6px}
+  .pu-lprice{font-size:13px;color:var(--pu-mute)}
+  .pu-lqty{display:flex;align-items:center;border:1px solid var(--pu-line);border-radius:30px;background:#fff}
+  .pu-lqty button{width:28px;height:28px;background:none;border:none;font-size:14px;cursor:pointer;font-weight:700}
+  .pu-lqty span{width:26px;text-align:center;font-weight:600;font-size:13px}
+  .pu-ltotal{font-weight:700;font-size:14px;text-align:right;min-width:64px}
+  .pu-remove{background:none;border:none;cursor:pointer;color:var(--pu-mute);width:15px;height:15px;justify-self:end}
+
+  .pu-empty{text-align:center;padding:80px 20px;color:var(--pu-mute)}
+  .pu-empty svg{width:50px;height:50px;margin-bottom:18px;color:var(--pu-line)}
+  .pu-empty a{display:inline-block;margin-top:18px;background:var(--pu-greendark);color:#fff;padding:14px 28px;border-radius:30px;font-weight:700;font-size:13px}
+
+  .pu-summary{border:1px solid var(--pu-line);border-radius:14px;padding:24px;height:fit-content;background:#fff}
+  .pu-summary h2{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:18px}
+  .pu-srow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;color:var(--pu-mute)}
+  .pu-srow.total{color:var(--pu-ink);font-size:1.15rem;font-weight:800;border-top:1px solid var(--pu-line);padding-top:14px;margin-top:8px}
+  .pu-checkoutbtn{width:100%;background:var(--pu-greendark);color:#fff;border:none;padding:15px;border-radius:30px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px}
+  .pu-note{font-size:12px;color:var(--pu-mute);margin-top:14px;text-align:center}
+
+  footer.pu-foot{background:var(--pu-greendark);color:#cfd6c5;padding:26px 36px;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+<nav class="pu-nav">
+  <a href="./index4.html" class="pu-logo" id="navLogoWrap" data-store-name>PURE</a>
+  <a href="./index4.html" class="pu-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Continue Shopping</a>
+</nav>
+
+<div class="pu-wrap"><h1>Your Cart</h1><div id="cartLayout"></div></div>
+
+<footer class="pu-foot">&copy; <span id="yr"></span> <span data-store-name>Pure</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function lineHTML(item){
+    return `<div class="pu-line">
+      <img src="${item.image}" alt="${item.name}">
+      <div><div class="pu-lname">${item.name}</div><div class="pu-lprice">${SK.price(item.price)} each</div></div>
+      <div class="pu-lqty"><button onclick="SK.changeQty(${item.id},-1);render()">−</button><span>${item.qty}</span><button onclick="SK.changeQty(${item.id},1);render()">+</button></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="pu-ltotal">${SK.price(item.price*item.qty)}</div>
+        <button class="pu-remove" onclick="SK.removeFromCart(${item.id});render()" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+    </div>`;
+  }
+  function render(){
+    const cart = SK.getCart();
+    const wrap = document.getElementById('cartLayout');
+    if (!cart.length){
+      wrap.innerHTML = `<div class="pu-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><div>Your cart is empty.</div><a href="./index4.html">Start Shopping</a></div>`;
+      return;
+    }
+    const total = SK.cartTotal();
+    wrap.innerHTML = `<div class="pu-layout">
+      <div>${cart.map(lineHTML).join('')}</div>
+      <div class="pu-summary">
+        <h2>Order Summary</h2>
+        <div class="pu-srow"><span>Subtotal</span><span>${SK.price(total)}</span></div>
+        <div class="pu-srow"><span>Shipping</span><span>${total>=50?'Free':'Calculated at checkout'}</span></div>
+        <div class="pu-srow total"><span>Total</span><span>${SK.price(total)}</span></div>
+        <button class="pu-checkoutbtn" onclick="location.href='./checkout4.html'">Proceed to Checkout</button>
+        <div class="pu-note">Taxes calculated at checkout. Cash on Delivery available.</div>
+      </div>
+    </div>`;
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    render();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
