@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="sk-loading">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>html.sk-loading body{opacity:0}body{opacity:1;transition:opacity .25s ease}</style>
+  <script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+  <style>
+    .about-hero { max-width:760px; margin:0 auto; padding:60px 24px 20px; text-align:center; }
+    .about-hero .label { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--primary); font-weight:700; margin-bottom:14px; }
+    .about-hero h1 { font-family:var(--font-head); font-size:clamp(1.9rem,5vw,2.8rem); margin-bottom:18px; }
+    .about-hero p { color:var(--text2); font-size:15px; line-height:1.75; }
+    .about-img { max-width:1000px; margin:30px auto 0; aspect-ratio:16/7; background:var(--bg2); border-radius:14px; overflow:hidden; }
+    .about-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    .about-grid { max-width:1000px; margin:0 auto; padding:60px 24px; display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .about-grid div { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:26px; }
+    .about-grid svg { width:24px; height:24px; color:var(--primary); margin-bottom:12px; }
+    .about-grid h3 { font-family:var(--font-head); font-size:1rem; margin-bottom:6px; }
+    .about-grid p { color:var(--text2); font-size:13.5px; line-height:1.6; }
+    .about-cta { max-width:760px; margin:0 auto; padding:0 24px 70px; text-align:center; }
+    .about-cta a { display:inline-flex; background:var(--primary); color:#fff; padding:14px 28px; border-radius:var(--radius-sm); font-weight:600; text-decoration:none; }
+    @media(max-width:700px){.about-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="sk-default">
+  <div id="announcementBar"></div>
+  <nav id="mainNav"></nav>
+
+  <div class="about-hero">
+    <div class="label">Our Story</div>
+    <h1 id="aboutTitle">About <span data-store-name>My Store</span></h1>
+    <p id="aboutStory">We started this store because we believe in doing a few things really well, instead of everything halfway. Every product here is something we'd genuinely use ourselves — chosen carefully, never rushed.</p>
+  </div>
+
+  <div class="about-img"><img src="./assets/site/about.jpg" alt="" onerror="this.parentElement.style.background='linear-gradient(135deg,var(--bg2),var(--bg3))';this.remove()"></div>
+
+  <div class="about-grid">
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+      <h3>Quality First</h3>
+      <p id="aboutMission">We check every product ourselves before it goes on the shelf — no exceptions.</p>
+    </div>
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <h3>Real Support</h3>
+      <p>Questions go to an actual person, not a bot maze. Reach out any time.</p>
+    </div>
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg>
+      <h3>Easy Returns</h3>
+      <p id="aboutReturns">Not happy with something? Reach out and we'll sort it out.</p>
+    </div>
+  </div>
+
+  <div class="about-cta">
+    <a href="./index.html#products" id="aboutCtaLink">Shop Now</a>
+  </div>
+
+  <footer style="border-top:1px solid var(--border);padding:28px 24px;text-align:center;color:var(--text3);font-size:13px">
+    &copy; <span id="yr"></span> <span data-store-name>My Store</span> &middot; <a href="./privacy.html" style="color:var(--primary)">Privacy</a> &middot; <a href="./terms.html" style="color:var(--primary)">Terms</a> &middot; <a href="./services.html" style="color:var(--primary)">Services</a>
+  </footer>
+
+  <script src="./js/app.js"></script>
+  <script>
+    async function main(){
+      await SK.init();
+      SK.renderNav();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+      const about = SK.config.about || {};
+      const biz = SK.config.business || {};
+      if (about.story) document.getElementById('aboutStory').textContent = about.story;
+      if (about.mission) document.getElementById('aboutMission').textContent = about.mission;
+      if (biz.returnsWindowDays) document.getElementById('aboutReturns').textContent = `Returns accepted within ${biz.returnsWindowDays} days — reach out and we'll sort it out.`;
+      document.title = `About — ${SK.config.store?.name || 'My Store'}`;
+      SK.reveal();
+    }
+    main();
+  </script>
+</body>
+</html>

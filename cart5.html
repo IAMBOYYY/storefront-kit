@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — Nova</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--nv-bg:#0a0e0c;--nv-bg2:#111613;--nv-card:#171c19;--nv-line:#252b27;--nv-mute:#8a958e;--nv-accent:#39ff8e}
+  body{font-family:'Inter',sans-serif;color:#eef1ee;background:var(--nv-bg)}
+  h1{font-family:'Space Grotesk',sans-serif}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .nv-nav{position:sticky;top:0;z-index:300;background:rgba(10,14,12,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--nv-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .nv-logo{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
+  .nv-logo span{color:var(--nv-accent)}
+  .nv-backlink{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;color:#c7cdc8}
+  .nv-backlink svg{width:14px;height:14px}
+
+  .nv-wrap{max-width:980px;margin:0 auto;padding:46px 32px 90px}
+  .nv-wrap h1{font-size:clamp(1.8rem,4vw,2.4rem);margin-bottom:28px}
+  .nv-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:40px}
+  @media(max-width:780px){.nv-layout{grid-template-columns:1fr}}
+
+  .nv-line{display:grid;grid-template-columns:80px 1fr auto auto;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--nv-line)}
+  .nv-line img{width:80px;height:80px;object-fit:cover;background:var(--nv-card);border-radius:10px}
+  .nv-lname{font-weight:700;font-size:14px;margin-bottom:6px}
+  .nv-lprice{font-size:13px;color:var(--nv-mute)}
+  .nv-lqty{display:flex;align-items:center;border:1px solid var(--nv-line);border-radius:8px;background:var(--nv-card)}
+  .nv-lqty button{width:28px;height:28px;background:none;border:none;font-size:14px;cursor:pointer;color:#eef1ee;font-weight:700}
+  .nv-lqty span{width:26px;text-align:center;font-weight:600;font-size:13px}
+  .nv-ltotal{font-weight:700;font-size:14px;text-align:right;min-width:64px;color:var(--nv-accent)}
+  .nv-remove{background:none;border:none;cursor:pointer;color:var(--nv-mute);width:15px;height:15px;justify-self:end}
+
+  .nv-empty{text-align:center;padding:80px 20px;color:var(--nv-mute)}
+  .nv-empty svg{width:50px;height:50px;margin-bottom:18px;color:var(--nv-line)}
+  .nv-empty a{display:inline-block;margin-top:18px;background:var(--nv-accent);color:#06150c;padding:14px 28px;border-radius:8px;font-weight:700;font-size:13px}
+
+  .nv-summary{border:1px solid var(--nv-line);border-radius:14px;padding:24px;height:fit-content;background:var(--nv-card)}
+  .nv-summary h2{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;margin-bottom:18px}
+  .nv-srow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;color:var(--nv-mute)}
+  .nv-srow.total{color:#fff;font-size:1.15rem;font-weight:700;border-top:1px solid var(--nv-line);padding-top:14px;margin-top:8px}
+  .nv-checkoutbtn{width:100%;background:var(--nv-accent);color:#06150c;border:none;padding:15px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px}
+  .nv-note{font-size:12px;color:var(--nv-mute);margin-top:14px;text-align:center}
+
+  footer.nv-foot{background:var(--nv-bg2);border-top:1px solid var(--nv-line);padding:26px 32px;text-align:center;font-size:12px;color:var(--nv-mute)}
+</style>
+</head>
+<body>
+<nav class="nv-nav">
+  <a href="./index5.html" class="nv-logo" id="navLogoWrap" data-store-name>NOVA<span>.</span></a>
+  <a href="./index5.html" class="nv-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Continue Shopping</a>
+</nav>
+
+<div class="nv-wrap"><h1>Your Cart</h1><div id="cartLayout"></div></div>
+
+<footer class="nv-foot">&copy; <span id="yr"></span> <span data-store-name>Nova</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function lineHTML(item){
+    return `<div class="nv-line">
+      <img src="${item.image}" alt="${item.name}">
+      <div><div class="nv-lname">${item.name}</div><div class="nv-lprice">${SK.price(item.price)} each</div></div>
+      <div class="nv-lqty"><button onclick="SK.changeQty(${item.id},-1);render()">−</button><span>${item.qty}</span><button onclick="SK.changeQty(${item.id},1);render()">+</button></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="nv-ltotal">${SK.price(item.price*item.qty)}</div>
+        <button class="nv-remove" onclick="SK.removeFromCart(${item.id});render()" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+    </div>`;
+  }
+  function render(){
+    const cart = SK.getCart();
+    const wrap = document.getElementById('cartLayout');
+    if (!cart.length){
+      wrap.innerHTML = `<div class="nv-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><div>Your cart is empty.</div><a href="./index5.html">Start Shopping</a></div>`;
+      return;
+    }
+    const total = SK.cartTotal();
+    wrap.innerHTML = `<div class="nv-layout">
+      <div>${cart.map(lineHTML).join('')}</div>
+      <div class="nv-summary">
+        <h2>Order Summary</h2>
+        <div class="nv-srow"><span>Subtotal</span><span>${SK.price(total)}</span></div>
+        <div class="nv-srow"><span>Shipping</span><span>${total>=50?'Free':'Calculated at checkout'}</span></div>
+        <div class="nv-srow total"><span>Total</span><span>${SK.price(total)}</span></div>
+        <button class="nv-checkoutbtn" onclick="location.href='./checkout5.html'">Proceed to Checkout</button>
+        <div class="nv-note">Taxes calculated at checkout. Cash on Delivery available.</div>
+      </div>
+    </div>`;
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    render();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>

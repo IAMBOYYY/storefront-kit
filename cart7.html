@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — Noir</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--no-bg:#0d0d0d;--no-line:#262626;--no-card:#161616;--no-mute:#8c8c8c;--no-white:#f5f5f5}
+  body{font-family:'Inter',sans-serif;color:var(--no-white);background:var(--no-bg)}
+  h1{font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .no-nav{position:sticky;top:0;z-index:300;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--no-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .no-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:4px}
+  .no-backlink{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:6px;color:#ccc}
+  .no-backlink svg{width:14px;height:14px}
+
+  .no-wrap{max-width:980px;margin:0 auto;padding:46px 32px 90px}
+  .no-wrap h1{font-size:clamp(1.9rem,4vw,2.6rem);margin-bottom:30px}
+  .no-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:40px}
+  @media(max-width:780px){.no-layout{grid-template-columns:1fr}}
+
+  .no-line{display:grid;grid-template-columns:84px 1fr auto auto;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--no-line)}
+  .no-line img{width:84px;height:84px;object-fit:cover;background:var(--no-card)}
+  .no-lname{font-weight:700;font-size:14px;margin-bottom:6px}
+  .no-lprice{font-size:13px;color:var(--no-mute)}
+  .no-lqty{display:flex;align-items:center;border:1px solid var(--no-line)}
+  .no-lqty button{width:30px;height:30px;background:none;border:none;font-size:15px;cursor:pointer;color:#fff;font-weight:700}
+  .no-lqty span{width:30px;text-align:center;font-weight:700;font-size:13px}
+  .no-ltotal{font-weight:700;font-size:14px;text-align:right;min-width:70px}
+  .no-remove{background:none;border:none;cursor:pointer;color:var(--no-mute);width:16px;height:16px;justify-self:end}
+
+  .no-empty{text-align:center;padding:80px 20px;color:var(--no-mute)}
+  .no-empty svg{width:54px;height:54px;margin-bottom:18px;color:var(--no-line)}
+  .no-empty a{display:inline-block;margin-top:18px;background:#fff;color:#000;padding:14px 28px;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+
+  .no-summary{border:1px solid var(--no-line);padding:26px;height:fit-content}
+  .no-summary h2{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-size:1.2rem;margin-bottom:18px}
+  .no-srow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;color:var(--no-mute)}
+  .no-srow.total{color:#fff;font-size:1.2rem;font-weight:700;border-top:1px solid var(--no-line);padding-top:14px;margin-top:8px}
+  .no-checkoutbtn{width:100%;background:#fff;color:#000;border:none;padding:17px;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-top:16px}
+  .no-note{font-size:12px;color:var(--no-mute);margin-top:14px;text-align:center}
+
+  footer.no-foot{background:#000;border-top:1px solid var(--no-line);padding:26px 32px;text-align:center;font-size:12px;color:#888}
+</style>
+</head>
+<body>
+<nav class="no-nav">
+  <a href="./index7.html" class="no-logo" id="navLogoWrap" data-store-name>NOIR</a>
+  <a href="./index7.html" class="no-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Continue Shopping</a>
+</nav>
+
+<div class="no-wrap"><h1>Your Cart</h1><div id="cartLayout"></div></div>
+
+<footer class="no-foot">&copy; <span id="yr"></span> <span data-store-name>Noir</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function lineHTML(item){
+    return `<div class="no-line">
+      <img src="${item.image}" alt="${item.name}">
+      <div><div class="no-lname">${item.name}</div><div class="no-lprice">${SK.price(item.price)} each</div></div>
+      <div class="no-lqty"><button onclick="SK.changeQty(${item.id},-1);render()">−</button><span>${item.qty}</span><button onclick="SK.changeQty(${item.id},1);render()">+</button></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="no-ltotal">${SK.price(item.price*item.qty)}</div>
+        <button class="no-remove" onclick="SK.removeFromCart(${item.id});render()" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+    </div>`;
+  }
+  function render(){
+    const cart = SK.getCart();
+    const wrap = document.getElementById('cartLayout');
+    if (!cart.length){
+      wrap.innerHTML = `<div class="no-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><div>Your cart is empty.</div><a href="./index7.html">Start Shopping</a></div>`;
+      return;
+    }
+    const total = SK.cartTotal();
+    wrap.innerHTML = `<div class="no-layout">
+      <div>${cart.map(lineHTML).join('')}</div>
+      <div class="no-summary">
+        <h2>Order Summary</h2>
+        <div class="no-srow"><span>Subtotal</span><span>${SK.price(total)}</span></div>
+        <div class="no-srow total"><span>Total</span><span>${SK.price(total)}</span></div>
+        <button class="no-checkoutbtn" onclick="location.href='./checkout7.html'">Proceed to Checkout</button>
+        <div class="no-note">Taxes calculated at checkout. Cash on Delivery available.</div>
+      </div>
+    </div>`;
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    render();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
