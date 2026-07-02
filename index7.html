@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noir — Storefront Template 7</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--no-bg:#0d0d0d;--no-line:#262626;--no-card:#161616;--no-mute:#8c8c8c;--no-white:#f5f5f5}
+  body{font-family:'Inter',sans-serif;color:var(--no-white);background:var(--no-bg)}
+  h1,h2,h3,.no-disp{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;line-height:1.05}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .no-bar{background:#000;color:#bbb;text-align:center;font-size:11px;padding:9px 12px;letter-spacing:2px;font-weight:600;border-bottom:1px solid var(--no-line)}
+  .no-nav{position:sticky;top:0;z-index:300;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--no-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .no-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:4px}
+  .no-links{display:flex;gap:30px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#ccc}
+  .no-links a:hover{color:#fff}
+  .no-navright{display:flex;align-items:center;gap:16px}
+  .no-ibtn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--no-line);cursor:pointer;position:relative;color:#fff}
+  .no-ibtn svg{width:16px;height:16px}
+  [data-cart-count]{position:absolute;top:-4px;right:-4px;background:#fff;color:#000;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  @media(max-width:880px){.no-links{display:none}}
+
+  .no-hero{position:relative;min-height:82vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+  .no-hero .panel{position:relative;overflow:hidden;background:var(--no-card)}
+  .no-hero video,.no-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.15)}
+  .no-herotext{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:3;background:rgba(0,0,0,.25);padding:24px}
+  .no-herotext .no-eyebrow{font-size:11px;letter-spacing:3px;color:#ddd;margin-bottom:14px}
+  .no-herotext h1{font-size:clamp(2.4rem,7vw,5rem);margin-bottom:18px;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+  .no-herotext p{font-family:'Inter',sans-serif;color:#ddd;font-size:14px;max-width:340px;margin-bottom:24px;letter-spacing:.2px;line-height:1.6}
+  .no-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#000;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:15px 30px;border:none;cursor:pointer}
+  @media(max-width:780px){.no-hero{grid-template-columns:1fr;min-height:62vh}.no-hero .panel:last-child{display:none}}
+
+  .no-section{max-width:1320px;margin:0 auto;padding:70px 32px}
+  .no-sechead{text-align:center;margin-bottom:8px}
+  .no-sechead h2{font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:3px}
+  .no-sechead p{font-family:'Inter',sans-serif;text-align:center;color:var(--no-mute);font-size:13px;margin-bottom:36px;letter-spacing:.5px}
+  .no-cats{display:flex;justify-content:center;gap:10px;margin-bottom:34px;flex-wrap:wrap}
+  .no-cat{padding:9px 20px;border:1px solid var(--no-line);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:none;color:#ccc}
+  .no-cat.active,.no-cat:hover{background:#fff;color:#000;border-color:#fff}
+
+  .no-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--no-line)}
+  .no-card{background:var(--no-bg);cursor:pointer}
+  .no-cardimg{aspect-ratio:1;background:var(--no-card);overflow:hidden;position:relative}
+  .no-cardimg img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:grayscale(.1)}
+  .no-card:hover .no-cardimg img{transform:scale(1.06)}
+  .no-badge{position:absolute;top:10px;left:10px;background:#fff;color:#000;font-size:10px;font-weight:800;letter-spacing:1px;padding:4px 9px;text-transform:uppercase}
+  .no-cardbody{padding:16px}
+  .no-cardcat{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--no-mute);margin-bottom:6px}
+  .no-cardname{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;margin-bottom:10px;letter-spacing:0}
+  .no-cardfoot{display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif}
+  .no-price{font-weight:700;font-size:14px}
+  .no-old{font-size:12px;color:var(--no-mute);text-decoration:line-through;margin-right:6px}
+  .no-addbtn{width:32px;height:32px;border:1px solid var(--no-line);background:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .no-addbtn:hover{background:#fff;color:#000;border-color:#fff}
+  .no-addbtn svg{width:14px;height:14px}
+
+  .no-statement{text-align:center;max-width:760px;margin:0 auto;padding:0 32px 70px}
+  .no-statement p{font-family:'Inter',sans-serif;color:#ccc;font-size:15px;line-height:1.8;letter-spacing:.3px}
+
+  footer.no-foot{background:#000;border-top:1px solid var(--no-line);padding:50px 32px 26px}
+  .no-footgrid{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;margin-bottom:36px;font-family:'Inter',sans-serif}
+  .no-footgrid h4{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;color:#fff}
+  .no-footgrid p,.no-footgrid a{display:block;font-size:13px;color:#999;margin-bottom:9px}
+  .no-footbottom{max-width:1320px;margin:0 auto;border-top:1px solid var(--no-line);padding-top:18px;font-size:12px;color:#777;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'Inter',sans-serif}
+  @media(max-width:700px){.no-footgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="no-bar">Limited releases &middot; Exclusive drops &middot; Elegance is now live</div>
+<nav class="no-nav">
+  <a href="./index7.html" class="no-logo" id="navLogoWrap" data-store-name>NOIR</a>
+  <div class="no-links"><a href="./index7.html">Home</a><a href="./index7.html#shop">Catalog</a><a href="./about.html">About</a></div>
+  <div class="no-navright">
+    <a href="./cart7.html" class="no-ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-cart-count style="display:none">0</span></a>
+  </div>
+</nav>
+
+<section class="no-hero">
+  <div class="panel">
+    <video id="heroVideo" autoplay muted loop playsinline poster="./assets/templates/template7/hero.jpg">
+      <source src="./assets/templates/template7/hero.mp4" type="video/mp4">
+    </video>
+    <img id="heroImg" src="./assets/templates/template7/hero.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#000)';this.remove()">
+  </div>
+  <div class="panel">
+    <img src="./assets/templates/template7/hero-2.jpg" alt="" onerror="this.style.background='linear-gradient(135deg,#000,#1a1a1a)';this.remove()">
+  </div>
+  <div class="no-herotext">
+    <div class="no-eyebrow">Limited Edition</div>
+    <h1>Style. Vibe.<br>Reflect.</h1>
+    <p>Precision-tailored pieces that break convention and redefine presence. This isn't just fashion — it's a statement.</p>
+    <a href="#shop" class="no-btn">Shop Now</a>
+  </div>
+</section>
+
+<section class="no-section" id="shop">
+  <div class="no-sechead"><h2>Designed to Disrupt</h2><p>New arrivals, dropped weekly</p></div>
+  <div class="no-cats" id="noCats"></div>
+  <div class="no-grid" id="noGrid"></div>
+</section>
+
+<div class="no-statement">
+  <p>Luxury staples for the modern disruptor. Every piece is precision-tailored, limited in number, and made to outlast every trend that comes after it.</p>
+</div>
+
+<footer class="no-foot">
+  <div class="no-footgrid">
+    <div><h4 style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px" data-store-name>Noir</h4><p style="max-width:280px">Limited releases. Exclusive drops. Precision-tailored staples for the modern disruptor.</p></div>
+    <div><h4>Shop</h4><a href="./index7.html#shop">Catalog</a><a href="./cart7.html">Cart</a></div>
+    <div><h4>Company</h4><a href="./about.html">About</a><a href="./services.html">Services</a></div>
+    <div><h4>Help</h4><a href="./checkout7.html">Checkout</a><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a></div>
+  </div>
+  <div class="no-footbottom"><span>&copy; <span id="yr"></span> <span data-store-name>Noir</span></span><span id="poweredBy">Powered by StorefrontKit</span></div>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  let allProducts = [], activeCat = 'All';
+  function cardHTML(p){
+    const imgs = SK.getProductImages(p);
+    const onSale = p.oldPrice && p.oldPrice > p.price;
+    return `<div class="no-card" onclick="location.href='./product7.html?id=${p.id}'">
+      <div class="no-cardimg">
+        ${onSale ? '<span class="no-badge">Sale</span>' : (p.badge?`<span class="no-badge">${p.badge}</span>`:'')}
+        <img src="${imgs[0]}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="no-cardbody">
+        <div class="no-cardcat">${p.category||'Shop'}</div>
+        <div class="no-cardname">${p.name}</div>
+        <div class="no-cardfoot">
+          <div>${onSale?`<span class="no-old">${SK.price(p.oldPrice)}</span>`:''}<span class="no-price">${SK.price(p.price)}</span></div>
+          <button class="no-addbtn" onclick="event.stopPropagation();quickAdd(${p.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5v14"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  }
+  function quickAdd(id){ const p = allProducts.find(x=>x.id===id); if (p) SK.addToCart(p,1); }
+  function renderCats(){
+    const cats = ['All', ...new Set(allProducts.map(p=>p.category).filter(Boolean))];
+    document.getElementById('noCats').innerHTML = cats.map(c=>`<button class="no-cat ${c===activeCat?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c}</button>`).join('');
+  }
+  function setCat(c){ activeCat=c; renderCats(); renderGrid(); }
+  function renderGrid(){
+    const list = activeCat==='All' ? allProducts : allProducts.filter(p=>p.category===activeCat);
+    document.getElementById('noGrid').innerHTML = list.length ? list.map(cardHTML).join('') :
+      `<div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--no-mute);font-family:'Inter',sans-serif">No products yet. Add some from <a href="./admin.html" style="text-decoration:underline;color:#fff">/admin.html</a>.</div>`;
+  }
+  async function main(){
+    await SK.init();
+    SK.bindHeroVideo(document.getElementById('heroVideo'));
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    const ft = SK.config.footer || {};
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+    await SK.loadProducts();
+    allProducts = SK.products;
+    renderCats(); renderGrid();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>

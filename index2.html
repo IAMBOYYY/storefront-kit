@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Velocity — Storefront Template 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --vlx-ink:#0c0c0c; --vlx-paper:#ffffff; --vlx-mute:#6b6b6b; --vlx-line:#e7e7e7;
+    --vlx-card:#f5f5f5; --vlx-accent:#ff3b30; --vlx-radius:2px;
+  }
+  body{font-family:'Inter',sans-serif;color:var(--vlx-ink);background:var(--vlx-paper);overflow-x:hidden}
+  h1,h2,h3,.vlx-disp{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.5px;line-height:1.02}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+
+  /* utility bar */
+  .vlx-utility{background:var(--vlx-ink);color:#fff;text-align:center;font-size:11px;font-weight:600;letter-spacing:1.5px;padding:9px 12px;text-transform:uppercase}
+
+  /* nav */
+  .vlx-nav{position:sticky;top:0;z-index:300;background:var(--vlx-paper);border-bottom:2px solid var(--vlx-ink);height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+  .vlx-logo{font-family:'Archivo Black',sans-serif;font-size:1.5rem;letter-spacing:-1px}
+  .vlx-links{display:flex;gap:28px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .vlx-links a{padding:4px 0;border-bottom:2px solid transparent;transition:border-color .2s}
+  .vlx-links a:hover{border-color:var(--vlx-ink)}
+  .vlx-navright{display:flex;align-items:center;gap:18px}
+  .vlx-iconbtn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--vlx-ink);display:flex;align-items:center;justify-content:center;position:relative;background:none;cursor:pointer}
+  .vlx-iconbtn svg{width:16px;height:16px}
+  .vlx-iconbtn:hover{background:var(--vlx-ink);color:#fff}
+  [data-cart-count]{position:absolute;top:-6px;right:-6px;background:var(--vlx-accent);color:#fff;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .vlx-menubtn{display:none;background:none;border:none;cursor:pointer;width:24px;height:24px}
+  @media(max-width:880px){.vlx-links{display:none}.vlx-menubtn{display:block}}
+
+  /* hero */
+  .vlx-hero{position:relative;min-height:78vh;display:flex;align-items:center;background:var(--vlx-ink);color:#fff;overflow:hidden}
+  .vlx-hero video,.vlx-hero .vlx-heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+  .vlx-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(0,0,0,.75),rgba(0,0,0,.15))}
+  .vlx-herocontent{position:relative;z-index:2;padding:0 28px;max-width:640px}
+  .vlx-eyebrow{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--vlx-accent);margin-bottom:14px}
+  .vlx-herocontent h1{font-size:clamp(2.4rem,7vw,4.6rem);margin-bottom:16px}
+  .vlx-herocontent p{font-size:15px;color:#ddd;max-width:420px;margin-bottom:28px;line-height:1.6;font-weight:400;text-transform:none}
+  .vlx-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--vlx-ink);font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:16px 30px;border:none;cursor:pointer;transition:transform .15s}
+  .vlx-btn:hover{transform:translateY(-2px)}
+  .vlx-btn-outline{background:transparent;color:#fff;border:1.5px solid #fff}
+  .vlx-btn-outline:hover{background:#fff;color:var(--vlx-ink)}
+
+  /* strip */
+  .vlx-strip{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding:20px 24px;border-bottom:1px solid var(--vlx-line);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--vlx-mute)}
+  .vlx-strip span{display:flex;align-items:center;gap:8px}
+  .vlx-strip svg{width:16px;height:16px}
+
+  /* section */
+  .vlx-section{max-width:1320px;margin:0 auto;padding:64px 28px}
+  .vlx-sechead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:30px;flex-wrap:wrap;gap:10px}
+  .vlx-sechead h2{font-size:clamp(1.6rem,4vw,2.4rem)}
+  .vlx-viewall{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid var(--vlx-ink);padding-bottom:3px}
+
+  .vlx-cats{display:flex;gap:14px;overflow-x:auto;margin-bottom:34px;padding-bottom:6px}
+  .vlx-cat{flex-shrink:0;padding:10px 22px;border:1.5px solid var(--vlx-ink);font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:none}
+  .vlx-cat.active,.vlx-cat:hover{background:var(--vlx-ink);color:#fff}
+
+  .vlx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px;background:var(--vlx-line)}
+  .vlx-card{background:#fff;cursor:pointer;display:flex;flex-direction:column}
+  .vlx-cardimg{aspect-ratio:1;background:var(--vlx-card);overflow:hidden;position:relative}
+  .vlx-cardimg img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .vlx-card:hover .vlx-cardimg img{transform:scale(1.08)}
+  .vlx-badge{position:absolute;top:10px;left:10px;background:var(--vlx-accent);color:#fff;font-size:10px;font-weight:800;letter-spacing:1px;padding:4px 9px;text-transform:uppercase}
+  .vlx-cardbody{padding:16px}
+  .vlx-cardcat{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--vlx-mute);margin-bottom:6px}
+  .vlx-cardname{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;text-transform:none;letter-spacing:0;margin-bottom:8px;line-height:1.3}
+  .vlx-cardfoot{display:flex;justify-content:space-between;align-items:center}
+  .vlx-price{font-weight:800;font-size:15px}
+  .vlx-old{font-size:12px;color:var(--vlx-mute);text-decoration:line-through;margin-right:6px}
+  .vlx-addbtn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--vlx-ink);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .vlx-addbtn:hover{background:var(--vlx-ink);color:#fff}
+  .vlx-addbtn svg{width:14px;height:14px}
+
+  .vlx-promo{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--vlx-ink)}
+  .vlx-promo>div{position:relative;min-height:340px;background:var(--vlx-card);display:flex;align-items:flex-end;padding:30px;color:#fff;overflow:hidden}
+  .vlx-promo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.65}
+  .vlx-promo>div::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7))}
+  .vlx-promo h3{position:relative;z-index:1;font-size:1.6rem}
+  @media(max-width:700px){.vlx-promo{grid-template-columns:1fr}}
+
+  footer.vlx-foot{background:var(--vlx-ink);color:#fff;padding:60px 28px 28px}
+  .vlx-footgrid{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;margin-bottom:40px}
+  .vlx-footgrid h4{font-family:'Inter',sans-serif;text-transform:none;font-size:13px;font-weight:700;letter-spacing:0;margin-bottom:14px;color:#aaa}
+  .vlx-footgrid p,.vlx-footgrid a{display:block;font-size:13px;color:#ccc;margin-bottom:8px}
+  .vlx-footbottom{max-width:1320px;margin:0 auto;border-top:1px solid #2a2a2a;padding-top:20px;font-size:12px;color:#888;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  @media(max-width:700px){.vlx-footgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="vlx-utility">Free shipping on orders over $75 — New drops every Friday</div>
+
+<nav class="vlx-nav">
+  <a href="./index2.html" class="vlx-logo" id="navLogoWrap" data-store-name>VELOCITY</a>
+  <div class="vlx-links">
+    <a href="./index2.html">Home</a>
+    <a href="./index2.html#shop">Shop</a>
+    <a href="./about.html">About</a>
+  </div>
+  <div class="vlx-navright">
+    <button class="vlx-iconbtn" id="searchBtn" onclick="toggleSearch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <a href="./cart2.html" class="vlx-iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-cart-count style="display:none">0</span></a>
+    <button class="vlx-menubtn" onclick="toggleMobileMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+<div id="searchBar" style="display:none;background:#fff;border-bottom:2px solid var(--vlx-ink);padding:14px 28px">
+  <input id="searchInput" type="text" placeholder="Search products…" style="width:100%;max-width:480px;border:1.5px solid var(--vlx-ink);padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;background:none;color:var(--vlx-ink)" onkeydown="if(event.key==='Enter')runSearch()">
+</div>
+<div id="mobileMenu" style="display:none;background:#fff;border-bottom:2px solid var(--vlx-ink);padding:16px 28px;flex-direction:column;gap:14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase">
+  <a href="./index2.html">Home</a>
+  <a href="./index2.html#shop">Shop</a>
+  <a href="./about.html">About</a>
+</div>
+
+<section class="vlx-hero">
+  <video id="heroVideo" autoplay muted loop playsinline poster="./assets/templates/template2/hero.jpg">
+    <source src="./assets/templates/template2/hero.mp4" type="video/mp4">
+  </video>
+  <img class="vlx-heroimg" id="heroImg" src="./assets/templates/template2/hero.jpg" alt=""
+       onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#000)';this.removeAttribute('src')">
+  <div class="vlx-herocontent">
+    <div class="vlx-eyebrow">New Season</div>
+    <h1>Do It Now.<br>Move Faster.</h1>
+    <p>Performance gear engineered for the streets and the track. Built to move with you, not against you.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <a href="#shop" class="vlx-btn">Shop The Drop</a>
+      <a href="./about.html" class="vlx-btn vlx-btn-outline">Our Story</a>
+    </div>
+  </div>
+</section>
+
+<div class="vlx-strip">
+  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping over $75</span>
+  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg> 30-day returns</span>
+  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Secure checkout</span>
+</div>
+
+<section class="vlx-section" id="shop">
+  <div class="vlx-sechead">
+    <h2>Shop The Range</h2>
+    <a href="#shop" class="vlx-viewall">View All</a>
+  </div>
+  <div class="vlx-cats" id="vlxCats"></div>
+  <div class="vlx-grid" id="vlxGrid"></div>
+</section>
+
+<div class="vlx-promo">
+  <div><img src="./assets/templates/template2/promo-1.jpg" alt="" onerror="this.style.opacity=0"><h3>Run Collection</h3></div>
+  <div><img src="./assets/templates/template2/promo-2.jpg" alt="" onerror="this.style.opacity=0"><h3>Street Essentials</h3></div>
+</div>
+
+<footer class="vlx-foot">
+  <div class="vlx-footgrid">
+    <div>
+      <h4 class="vlx-logo" style="color:#fff;font-family:'Archivo Black',sans-serif;font-size:1.1rem">VELOCITY</h4>
+      <p style="max-width:280px">Performance gear for people who don't sit still. Designed in-house, tested on the street.</p>
+    </div>
+    <div><h4>Shop</h4><a href="./index2.html#shop">All Products</a><a href="./cart2.html">Cart</a></div>
+    <div><h4>Company</h4><a href="./about.html">About Us</a><a href="./services.html">Services</a></div>
+    <div><h4>Help</h4><a href="./checkout2.html">Checkout</a><a href="#" id="footContactLink">Contact</a><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a></div>
+  </div>
+  <div class="vlx-footbottom">
+    <span>&copy; <span id="yr"></span> <span data-store-name>Velocity</span>. All rights reserved.</span>
+    <span id="poweredBy">Powered by StorefrontKit</span>
+  </div>
+</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  let allProducts = [];
+  let activeCat = 'All';
+
+  function cardHTML(p){
+    const imgs = SK.getProductImages(p);
+    const stock = SK.stockLabel(p.stock);
+    const onSale = p.oldPrice && p.oldPrice > p.price;
+    return `<div class="vlx-card" onclick="location.href='./product2.html?id=${p.id}'">
+      <div class="vlx-cardimg">
+        ${onSale ? '<span class="vlx-badge">Sale</span>' : (p.badge ? `<span class="vlx-badge">${p.badge}</span>` : '')}
+        <img src="${imgs[0]}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="vlx-cardbody">
+        <div class="vlx-cardcat">${p.category || 'Shop'}</div>
+        <div class="vlx-cardname">${p.name}</div>
+        <div class="vlx-cardfoot">
+          <div>${onSale ? `<span class="vlx-old">${SK.price(p.oldPrice)}</span>` : ''}<span class="vlx-price">${SK.price(p.price)}</span></div>
+          <button class="vlx-addbtn" onclick="event.stopPropagation();quickAdd(${p.id})" title="Add to cart" ${stock.cls==='stock-out'?'disabled style="opacity:.3;cursor:not-allowed"':''}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5v14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function toggleSearch(){
+    const bar = document.getElementById('searchBar');
+    const open = bar.style.display === 'none' || !bar.style.display;
+    bar.style.display = open ? '' : 'none';
+    if (open) document.getElementById('searchInput').focus();
+  }
+  function toggleMobileMenu(){
+    const m = document.getElementById('mobileMenu');
+    m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+  }
+  function runSearch(){
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (!q) return;
+    const grid = document.getElementById('vlxGrid');
+    const matches = allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
+    grid.innerHTML = matches.length ? matches.map(cardHTML).join('') :
+      `<div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--vlx-mute)">No products match "${q}".</div>`;
+    document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+  }
+
+  function quickAdd(id){
+    const p = allProducts.find(x => x.id === id);
+    if (p) SK.addToCart(p, 1);
+  }
+
+  function renderCats(){
+    const cats = ['All', ...new Set(allProducts.map(p => p.category).filter(Boolean))];
+    document.getElementById('vlxCats').innerHTML = cats.map(c =>
+      `<button class="vlx-cat ${c===activeCat?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c}</button>`
+    ).join('');
+  }
+  function setCat(c){ activeCat = c; renderCats(); renderGrid(); }
+
+  function renderGrid(){
+    const grid = document.getElementById('vlxGrid');
+    const list = activeCat === 'All' ? allProducts : allProducts.filter(p => p.category === activeCat);
+    grid.innerHTML = list.length ? list.map(cardHTML).join('') :
+      `<div style="padding:60px 20px;text-align:center;color:var(--vlx-mute);grid-column:1/-1">
+        No products yet. Add some from <a href="./admin.html" style="text-decoration:underline">/admin.html</a>.
+      </div>`;
+  }
+
+  async function main(){
+    await SK.init();
+    SK.bindHeroVideo(document.getElementById('heroVideo'));
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    const ft = SK.config.footer || {};
+    document.getElementById('poweredBy').style.display = ft.showPoweredBy === false ? 'none' : '';
+    await SK.loadProducts();
+    allProducts = SK.products;
+    renderCats();
+    renderGrid();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
