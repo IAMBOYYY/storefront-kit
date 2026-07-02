@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Noir</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--no-bg:#0d0d0d;--no-line:#262626;--no-card:#161616;--no-mute:#8c8c8c;--no-white:#f5f5f5;--no-success:#39ff8e}
+  body{font-family:'Inter',sans-serif;color:var(--no-white);background:var(--no-bg)}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .no-nav{position:sticky;top:0;z-index:300;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--no-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .no-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:4px}
+  .no-backlink{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:6px;color:#ccc}
+  .no-backlink svg{width:14px;height:14px}
+
+  .no-wrap{max-width:740px;margin:0 auto;padding:46px 32px 90px}
+  .no-steps{display:flex;gap:10px;margin-bottom:30px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--no-mute)}
+  .no-steps span.active{color:#fff}
+  .no-card{border:1px solid var(--no-line);padding:24px;margin-bottom:20px}
+  .no-card h2{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-size:1.05rem;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .no-card h2 .num{width:24px;height:24px;background:#fff;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Inter',sans-serif;font-weight:700}
+
+  .no-oline{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--no-line);color:#ccc}
+  .no-ototal{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;padding-top:14px}
+
+  .no-codbox{display:flex;align-items:center;gap:14px;background:var(--no-card);padding:16px}
+  .no-codbox svg{width:30px;height:30px;flex-shrink:0;color:var(--no-success)}
+  .no-codbox strong{display:block;font-size:14px}
+  .no-codbox span{font-size:12px;color:var(--no-mute)}
+
+  .no-channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .no-chanbtn{display:flex;align-items:center;gap:10px;padding:14px 16px;border:none;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none}
+  .no-chanbtn svg{width:17px;height:17px}
+  .no-chanarrow{margin-left:auto;width:12px;height:12px}
+  .no-empty{text-align:center;padding:80px 20px;color:var(--no-mute)}
+  .no-empty a{display:inline-block;margin-top:18px;background:#fff;color:#000;padding:14px 28px;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+  .no-orderid{background:var(--no-card);padding:10px 14px;font-size:12px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#ccc}
+  .no-orderid svg{width:14px;height:14px}
+
+  footer.no-foot{background:#000;border-top:1px solid var(--no-line);padding:26px 32px;text-align:center;font-size:12px;color:#888}
+</style>
+</head>
+<body>
+<nav class="no-nav">
+  <a href="./index7.html" class="no-logo" id="navLogoWrap" data-store-name>NOIR</a>
+  <a href="./cart7.html" class="no-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Edit Cart</a>
+</nav>
+
+<div class="no-wrap">
+  <h1 style="font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:clamp(1.9rem,4vw,2.5rem);margin-bottom:8px">Checkout</h1>
+  <div class="no-steps"><span class="active">1. Cart</span> &middot; <span class="active">2. Checkout</span> &middot; <span>3. Confirmed</span></div>
+
+  <div id="checkoutEmpty" style="display:none" class="no-empty">
+    <div>Your cart is empty — add something first.</div>
+    <a href="./index7.html">Browse Catalog</a>
+  </div>
+
+  <div id="checkoutContent">
+    <div class="no-orderid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 12.6 12 21.2 2.8 12 11.4 3.4H18a2 2 0 0 1 2 2v7.2z"/><circle cx="14.5" cy="9.5" r="1.3"/></svg> Order ID: <span id="orderIdVal"></span></div>
+
+    <div class="no-card"><h2><span class="num">1</span> Order Summary</h2><div id="orderLines"></div><div class="no-ototal"><span>Total</span><span id="orderTotal"></span></div></div>
+
+    <div class="no-card">
+      <h2><span class="num">2</span> Payment</h2>
+      <div class="no-codbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+        <div><strong>Cash on Delivery</strong><span>Pay when your order arrives at your door</span></div>
+      </div>
+    </div>
+
+    <div class="no-card">
+      <h2><span class="num">3</span> Send Your Order</h2>
+      <p style="font-size:13px;color:var(--no-mute);margin-bottom:16px">Tap a channel below to send us your order details — we'll confirm and get it moving.</p>
+      <div class="no-channels" id="channelsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="no-foot">&copy; <span id="yr"></span> <span data-store-name>Noir</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  function renderOrderLines(cart){
+    document.getElementById('orderLines').innerHTML = cart.map(i=>`<div class="no-oline"><span>${i.name} &times;${i.qty}</span><span>${SK.price(i.price*i.qty)}</span></div>`).join('');
+    document.getElementById('orderTotal').textContent = SK.price(SK.cartTotal());
+  }
+  function renderChannels(){
+    const grid = document.getElementById('channelsGrid');
+    const channels = SK.config.contact?.channels || {};
+    const checkoutChannels = SK.config.contact?.checkoutChannels || Object.keys(channels);
+    const orderMsg = SK.buildOrderMessage();
+    const enabled = checkoutChannels.filter(ch => channels[ch]);
+    if (!enabled.length){
+      grid.innerHTML = `<div style="grid-column:1/-1;font-size:13px;color:var(--no-mute)">No contact channels configured yet. <a href="./admin.html" style="text-decoration:underline;color:#fff">Set them up</a>.</div>`;
+      return;
+    }
+    grid.innerHTML = enabled.map(ch=>{
+      const meta = SK.CHANNEL_META[ch] || { label: ch, icon: SK.ICONS.email, bg:'#6366f1' };
+      const url = SK.contactUrl(ch, orderMsg);
+      if (!url) return '';
+      return `<a href="${url}" target="_blank" class="no-chanbtn" style="background:${meta.bg}"><span style="width:17px;height:17px;display:flex">${meta.icon}</span><span>${meta.label}</span><span class="no-chanarrow">${SK.ICONS.arrow}</span></a>`;
+    }).join('');
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    document.getElementById('orderIdVal').textContent = SK._getOrderId();
+    const cart = SK.getCart();
+    if (!cart.length){
+      document.getElementById('checkoutEmpty').style.display = '';
+      document.getElementById('checkoutContent').style.display = 'none';
+      SK.reveal();
+      return;
+    }
+    renderOrderLines(cart);
+    renderChannels();
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
