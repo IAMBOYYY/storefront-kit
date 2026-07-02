@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="sk-loading">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services</title>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" />
+  <style>html.sk-loading body{opacity:0}body{opacity:1;transition:opacity .25s ease}</style>
+  <script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+  <style>
+    .svc-hero { max-width:760px; margin:0 auto; padding:60px 24px 10px; text-align:center; }
+    .svc-hero h1 { font-family:var(--font-head); font-size:clamp(1.9rem,5vw,2.6rem); margin-bottom:14px; }
+    .svc-hero p { color:var(--text2); font-size:15px; }
+    .svc-grid { max-width:900px; margin:0 auto; padding:50px 24px 70px; display:grid; gap:18px; }
+    .svc-row { display:flex; gap:18px; background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:24px; align-items:flex-start; }
+    .svc-row svg { width:26px; height:26px; color:var(--primary); flex-shrink:0; margin-top:2px; }
+    .svc-row h3 { font-family:var(--font-head); font-size:1.05rem; margin-bottom:6px; }
+    .svc-row p { color:var(--text2); font-size:14px; line-height:1.65; }
+  </style>
+</head>
+<body class="sk-default">
+  <div id="announcementBar"></div>
+  <nav id="mainNav"></nav>
+
+  <div class="svc-hero">
+    <h1>Services &amp; Support</h1>
+    <p>Everything you need to know about shopping with <span data-store-name>us</span>.</p>
+  </div>
+
+  <div class="svc-grid">
+    <div class="svc-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+      <div><h3>Shipping</h3><p id="svcShipping">Orders are usually processed within 1-2 business days.</p></div>
+    </div>
+    <div class="svc-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg>
+      <div><h3>Returns &amp; Exchanges</h3><p id="svcReturns">You may request a return or exchange within 30 days of delivery.</p></div>
+    </div>
+    <div class="svc-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+      <div><h3>Payment</h3><p id="svcPayment">Cash on Delivery — pay only once your order arrives.</p></div>
+    </div>
+    <div class="svc-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <div><h3>Get In Touch</h3><p id="svcContact">Reach out through any of the contact options on our checkout page — we usually reply within a day.</p></div>
+    </div>
+  </div>
+
+  <footer style="border-top:1px solid var(--border);padding:28px 24px;text-align:center;color:var(--text3);font-size:13px">
+    &copy; <span id="yr"></span> <span data-store-name>My Store</span> &middot; <a href="./privacy.html" style="color:var(--primary)">Privacy</a> &middot; <a href="./terms.html" style="color:var(--primary)">Terms</a> &middot; <a href="./about.html" style="color:var(--primary)">About</a>
+  </footer>
+
+  <script src="./js/app.js"></script>
+  <script>
+    async function main(){
+      await SK.init();
+      SK.renderNav();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+      const biz = SK.config.business || {};
+      const legal = SK.config.legal || {};
+      if (biz.shippingNote) document.getElementById('svcShipping').textContent = biz.shippingNote;
+      document.getElementById('svcReturns').textContent = legal.returnsNotes || `You may request a return or exchange within ${biz.returnsWindowDays || 30} days of delivery.`;
+      const email = SK.config.contact?.channels?.email;
+      const phone = SK.config.contact?.channels?.phone;
+      if (email || phone) {
+        document.getElementById('svcContact').innerHTML = `Reach us${email ? ` at <a href="mailto:${email}" style="color:var(--primary)">${email}</a>`:''}${phone ? `${email?' or call ':'at '}<a href="tel:${phone}" style="color:var(--primary)">${phone}</a>`:''} — we usually reply within a day.`;
+      }
+      document.title = `Services — ${SK.config.store?.name || 'My Store'}`;
+      SK.reveal();
+    }
+    main();
+  </script>
+</body>
+</html>

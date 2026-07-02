@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Redirecting…</title>
+<script>
+  // Spotlight is a single-product template — the homepage IS the product page.
+  // This file exists so /product6.html?id=X links (from cart/related, sharing, etc.)
+  // still work; it just forwards to the same experience on index6.html.
+  window.location.replace('./index6.html' + window.location.search);
+</script>
+</head>
+<body></body>
+</html>

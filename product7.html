@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product — Noir</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--no-bg:#0d0d0d;--no-line:#262626;--no-card:#161616;--no-mute:#8c8c8c;--no-white:#f5f5f5;--no-success:#39ff8e;--no-danger:#ff5c5c}
+  body{font-family:'Inter',sans-serif;color:var(--no-white);background:var(--no-bg)}
+  h1{font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .no-nav{position:sticky;top:0;z-index:300;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--no-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .no-logo{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:4px}
+  .no-ibtn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--no-line);cursor:pointer;position:relative;color:#fff}
+  .no-ibtn svg{width:16px;height:16px}
+  [data-cart-count]{position:absolute;top:-4px;right:-4px;background:#fff;color:#000;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+  .no-crumbs{max-width:1280px;margin:0 auto;padding:18px 32px 0;font-size:13px;color:var(--no-mute)}
+  .no-crumbs a{color:#fff;text-decoration:underline}
+  .no-pwrap{max-width:1280px;margin:0 auto;padding:24px 32px 70px;display:grid;grid-template-columns:1.1fr 1fr;gap:54px}
+  @media(max-width:880px){.no-pwrap{grid-template-columns:1fr;gap:24px}}
+
+  .no-mainimg{aspect-ratio:1;background:var(--no-card);border:1px solid var(--no-line);overflow:hidden;margin-bottom:10px}
+  .no-mainimg img{width:100%;height:100%;object-fit:cover;filter:grayscale(.1)}
+  .no-thumbs{display:flex;gap:8px}
+  .no-thumb{width:70px;height:70px;background:var(--no-card);cursor:pointer;border:1px solid var(--no-line);overflow:hidden}
+  .no-thumb.active{border-color:#fff}
+  .no-thumb img{width:100%;height:100%;object-fit:cover}
+
+  .no-info .no-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--no-mute);margin-bottom:10px}
+  .no-info h1{font-size:clamp(1.9rem,3.5vw,2.6rem);margin-bottom:12px}
+  .no-stars{display:flex;align-items:center;gap:8px;margin-bottom:18px;font-size:13px;color:var(--no-mute)}
+  .no-stars .row{display:flex;gap:1px}
+  .no-stars .row span{width:13px;height:13px;display:inline-flex}
+  .no-priceline{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+  .no-price{font-size:1.6rem;font-weight:700;font-family:'Inter',sans-serif}
+  .no-old{color:var(--no-mute);text-decoration:line-through;font-size:1rem}
+  .no-pill{font-size:11px;font-weight:700;padding:4px 10px}
+  .stock-in{background:rgba(57,255,142,.12);color:var(--no-success)} .stock-limited{background:rgba(255,180,0,.12);color:#ffb400} .stock-out{background:rgba(255,92,92,.12);color:var(--no-danger)}
+  .no-desc{font-size:14px;color:#bbb;line-height:1.75;margin-bottom:26px}
+
+  .no-qty{display:flex;align-items:center;border:1px solid var(--no-line);width:fit-content;margin-bottom:16px}
+  .no-qty button{width:40px;height:40px;background:none;border:none;font-size:16px;cursor:pointer;color:#fff;font-weight:700}
+  .no-qty span{width:34px;text-align:center;font-weight:700}
+  .no-actions{display:flex;gap:10px;margin-bottom:28px}
+  .no-addbig{flex:1;background:#fff;color:#000;border:none;padding:17px;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .no-addbig:disabled{opacity:.3;cursor:not-allowed}
+  .no-wish{width:54px;border:1px solid var(--no-line);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff}
+  .no-wish svg{width:18px;height:18px}
+
+  .no-trustrow{display:flex;gap:20px;flex-wrap:wrap;border-top:1px solid var(--no-line);padding-top:18px;font-size:12px;color:var(--no-mute)}
+  .no-trustrow span{display:flex;align-items:center;gap:6px}
+  .no-trustrow svg{width:15px;height:15px}
+
+  .no-related{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+  .no-related h2{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1.7rem;margin-bottom:22px}
+  .no-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--no-line)}
+  .no-card{background:var(--no-bg);cursor:pointer}
+  .no-cardimg{aspect-ratio:1;background:var(--no-card);overflow:hidden}
+  .no-cardimg img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+  .no-card:hover .no-cardimg img{transform:scale(1.05)}
+  .no-cardbody{padding:13px}
+  .no-cardname{font-size:13px;font-weight:600;margin-bottom:4px}
+  .no-cardprice{font-weight:700;font-size:13px}
+
+  footer.no-foot{background:#000;border-top:1px solid var(--no-line);padding:26px 32px;text-align:center;font-size:12px;color:#888}
+</style>
+</head>
+<body>
+<nav class="no-nav">
+  <a href="./index7.html" class="no-logo" id="navLogoWrap" data-store-name>NOIR</a>
+  <a href="./cart7.html" class="no-ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-cart-count style="display:none">0</span></a>
+</nav>
+
+<div class="no-crumbs"><a href="./index7.html">Home</a> / <a href="./index7.html#shop">Catalog</a> / <span id="crumbName">Product</span></div>
+
+<div class="no-pwrap">
+  <div>
+    <div class="no-mainimg"><img id="mainImg" src="" alt=""></div>
+    <div class="no-thumbs" id="thumbs"></div>
+  </div>
+  <div class="no-info">
+    <div class="no-tag" id="pCat">Shop</div>
+    <h1 id="pName">Loading…</h1>
+    <div class="no-stars"><span class="row" id="pStarsRow"></span><span id="pReviews"></span></div>
+    <div class="no-priceline">
+      <span class="no-price" id="pPrice"></span>
+      <span class="no-old" id="pOld" style="display:none"></span>
+      <span class="no-pill" id="pStock"></span>
+    </div>
+    <p class="no-desc" id="pDesc"></p>
+    <div class="no-qty"><button onclick="changeQty(-1)">−</button><span id="qtyVal">1</span><button onclick="changeQty(1)">+</button></div>
+    <div class="no-actions">
+      <button class="no-addbig" id="addBtn" onclick="addToCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Add to Cart
+      </button>
+      <button class="no-wish" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+    </div>
+    <div class="no-trustrow">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h11v11H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg> 30-day returns</span>
+    </div>
+  </div>
+</div>
+
+<div class="no-related"><h2>You May Also Like</h2><div class="no-grid" id="relGrid"></div></div>
+
+<footer class="no-foot">&copy; <span id="yr"></span> <span data-store-name>Noir</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script>
+  const qs = new URLSearchParams(location.search);
+  const productId = parseInt(qs.get('id'));
+  let currentProduct = null, qty = 1, imgs = [];
+
+  function changeQty(d){ qty = Math.max(1, qty+d); document.getElementById('qtyVal').textContent = qty; }
+  function addToCart(){ if (currentProduct) SK.addToCart(currentProduct, qty); }
+  function setMainImg(i){
+    document.getElementById('mainImg').src = imgs[i];
+    document.querySelectorAll('.no-thumb').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  }
+  function renderProduct(){
+    const p = currentProduct;
+    imgs = SK.getProductImages(p);
+    document.getElementById('crumbName').textContent = p.name;
+    document.getElementById('pCat').textContent = p.category || 'Shop';
+    document.getElementById('pName').textContent = p.name;
+    document.getElementById('pStarsRow').innerHTML = SK.renderStars(p.rating||4.5,13);
+    document.getElementById('pReviews').textContent = `(${p.reviews||0} reviews)`;
+    document.getElementById('pPrice').textContent = SK.price(p.price);
+    const onSale = p.oldPrice && p.oldPrice > p.price;
+    const oldEl = document.getElementById('pOld');
+    oldEl.style.display = onSale ? '' : 'none';
+    if (onSale) oldEl.textContent = SK.price(p.oldPrice);
+    const stock = SK.stockLabel(p.stock);
+    const stockEl = document.getElementById('pStock');
+    stockEl.textContent = stock.label; stockEl.className = 'no-pill ' + stock.cls;
+    document.getElementById('pDesc').textContent = p.description || '';
+    document.getElementById('thumbs').innerHTML = imgs.map((src,i)=>`<div class="no-thumb ${i===0?'active':''}" onclick="setMainImg(${i})"><img src="${src}" alt=""></div>`).join('');
+    setMainImg(0);
+    if (stock.cls === 'stock-out'){ const b=document.getElementById('addBtn'); b.disabled=true; b.textContent='Out of Stock'; }
+  }
+  function renderRelated(){
+    const others = SK.products.filter(p=>p.id!==currentProduct.id && p.category===currentProduct.category).slice(0,4);
+    const list = others.length ? others : SK.products.filter(p=>p.id!==currentProduct.id).slice(0,4);
+    document.getElementById('relGrid').innerHTML = list.map(p=>`
+      <div class="no-card" onclick="location.href='./product7.html?id=${p.id}'">
+        <div class="no-cardimg"><img src="${SK.getProductImages(p)[0]}" alt="${p.name}"></div>
+        <div class="no-cardbody"><div class="no-cardname">${p.name}</div><div class="no-cardprice">${SK.price(p.price)}</div></div>
+      </div>`).join('');
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    if (!productId) { window.location.href = './index7.html'; return; }
+    await SK.loadProducts();
+    currentProduct = SK.products.find(p=>p.id===productId);
+    if (!currentProduct) { window.location.href = './index7.html'; return; }
+    SK.addRecentlyViewed(productId);
+    renderProduct(); renderRelated();
+    document.title = `${currentProduct.name} — Noir`;
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
