@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" class="sk-loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Essentials</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+<style id="sk-anti-fouc">html.sk-loading body{opacity:0}body{transition:opacity .25s ease}</style>
+<script>setTimeout(function(){document.documentElement.classList.remove("sk-loading");},1800);</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--es-ink:#111;--es-mute:#777;--es-line:#eaeaea;--es-card:#f7f7f7;--es-paper:#fff;--es-success:#16803d;--skx-text:var(--es-ink);--skx-mute:var(--es-mute);--skx-line:var(--es-line);--skx-card:var(--es-card);--skx-accent:var(--es-ink);--skx-danger:#ef4444;--skx-radius:6px;}
+  body{font-family:'Inter',sans-serif;color:var(--es-ink);background:var(--es-paper)}
+  a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+  .es-bar{background:var(--es-ink);color:#fff;text-align:center;font-size:12px;padding:9px;font-weight:500}
+  .es-nav{position:sticky;top:0;z-index:300;background:var(--es-paper);border-bottom:1px solid var(--es-line);height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .es-logo{font-size:1.4rem;font-weight:800;letter-spacing:-.5px}
+  .es-backlink{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;color:#444}
+  .es-backlink svg{width:14px;height:14px}
+
+  .es-wrap{max-width:740px;margin:0 auto;padding:46px 32px 90px}
+  .es-steps{display:flex;gap:8px;margin-bottom:26px;font-size:12px;font-weight:600;color:var(--es-mute)}
+  .es-steps span.active{color:var(--es-ink);font-weight:700}
+  .es-card{border:1px solid var(--es-line);border-radius:8px;padding:22px;margin-bottom:18px}
+  .es-card h2{font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .es-card h2 .num{width:22px;height:22px;background:var(--es-ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+  .es-oline{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--es-line);color:#333}
+  .es-ototal{display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;padding-top:14px}
+
+  .es-codbox{display:flex;align-items:center;gap:14px;background:var(--es-card);padding:16px;border-radius:6px}
+  .es-codbox svg{width:28px;height:28px;flex-shrink:0;color:var(--es-success)}
+  .es-codbox strong{display:block;font-size:14px}
+  .es-codbox span{font-size:12px;color:var(--es-mute)}
+
+  .es-channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .es-chanbtn{display:flex;align-items:center;gap:10px;padding:13px 16px;border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none}
+  .es-chanbtn svg{width:16px;height:16px}
+  .es-chanarrow{margin-left:auto;width:11px;height:11px}
+  .es-empty{text-align:center;padding:80px 20px;color:var(--es-mute)}
+  .es-empty a{display:inline-block;margin-top:18px;background:var(--es-ink);color:#fff;padding:14px 28px;border-radius:4px;font-weight:700;font-size:13px}
+  .es-orderid{background:var(--es-card);padding:10px 14px;border-radius:6px;font-size:12px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+  .es-orderid svg{width:14px;height:14px}
+
+  footer.es-foot{border-top:1px solid var(--es-line);padding:26px 32px;text-align:center;font-size:12px;color:var(--es-mute)}
+
+  /* ---- shared checkout v2: shipping form + payment methods ---- */
+  .skx-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:480px){.skx-form-grid{grid-template-columns:1fr}}
+  .skx-frow{display:flex;flex-direction:column;gap:5px;margin-bottom:2px}
+  .skx-frow.full{grid-column:1/-1}
+  .skx-frow label{font-size:11px;font-weight:600;color:var(--skx-mute)}
+  .skx-input,.skx-textarea{background:var(--skx-card);border:1px solid var(--skx-line);border-radius:var(--skx-radius);padding:10px 12px;color:var(--skx-text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;width:100%}
+  .skx-input:focus,.skx-textarea:focus{border-color:var(--skx-accent)}
+  .skx-textarea{resize:vertical;min-height:56px;line-height:1.4}
+  .skx-pm-card{display:flex;align-items:center;gap:12px;border:1.5px solid var(--skx-line);border-radius:var(--skx-radius);padding:12px 14px;cursor:pointer;margin-bottom:8px;transition:border-color .2s,background .2s;position:relative}
+  .skx-pm-card:has(input:checked){border-color:var(--skx-accent);background:color-mix(in srgb,var(--skx-accent) 8%,transparent)}
+  .skx-pm-card input{position:absolute;opacity:0}
+  .skx-pm-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .skx-pm-text{display:flex;flex-direction:column;font-size:13px}
+  .skx-pm-text strong{font-size:14px;color:var(--skx-text)}
+  .skx-pm-text span{font-size:11.5px;color:var(--skx-mute);font-weight:400}
+  .skx-pm-check{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--skx-line);display:flex;align-items:center;justify-content:center;color:transparent;flex-shrink:0}
+  .skx-pm-card:has(input:checked) .skx-pm-check{background:var(--skx-accent);border-color:var(--skx-accent);color:#fff}
+  .skx-place-btn{width:100%;padding:15px;background:var(--skx-accent);color:#fff;border:none;border-radius:var(--skx-radius);font-size:15px;font-weight:800;cursor:pointer;transition:opacity .2s;font-family:inherit}
+  .skx-place-btn:hover{opacity:.9}
+  .skx-place-btn:disabled{opacity:.6;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="es-bar">Free shipping on orders over $99 &middot; Easy 30-day returns</div>
+<nav class="es-nav">
+  <a href="./index3.html" class="es-logo" id="navLogoWrap" data-store-name>ESSENTIALS</a>
+  <a href="./cart3.html" class="es-backlink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m11 18-6-6 6-6"/></svg> Edit Cart</a>
+</nav>
+
+<div class="es-wrap">
+  <h1 style="font-size:clamp(1.6rem,4vw,2.1rem);font-weight:800;margin-bottom:8px">Checkout</h1>
+  <div class="es-steps"><span class="active">1. Cart</span>&nbsp;&middot;&nbsp;<span class="active">2. Checkout</span>&nbsp;&middot;&nbsp;<span>3. Confirmed</span></div>
+
+  <div id="checkoutEmpty" style="display:none" class="es-empty">
+    <div>Your cart is empty — add something first.</div>
+    <a href="./index3.html">Browse Products</a>
+  </div>
+
+  <div id="checkoutContent">
+    <div class="es-orderid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 12.6 12 21.2 2.8 12 11.4 3.4H18a2 2 0 0 1 2 2v7.2z"/><circle cx="14.5" cy="9.5" r="1.3"/></svg> Order ID: <span id="orderIdVal"></span></div>
+
+    <div class="es-card">
+      <h2><span class="num">1</span> Order Summary</h2>
+      <div id="orderLines"></div>
+      <div class="es-ototal"><span>Total</span><span id="orderTotal"></span></div>
+    </div>
+
+    <div class="es-card">
+      <h2><span class="num">2</span> Shipping Details</h2>
+      <div class="skx-form-grid">
+        <div class="skx-frow"><label>Full Name *</label><input class="skx-input" id="ckName" placeholder="John Doe" /></div>
+        <div class="skx-frow"><label>Phone Number *</label><input class="skx-input" id="ckPhone" placeholder="+1 234 567 8900" /></div>
+        <div class="skx-frow full"><label>Email (optional)</label><input class="skx-input" id="ckEmail" type="email" placeholder="you@example.com" /></div>
+        <div class="skx-frow full"><label>Address Line 1 *</label><input class="skx-input" id="ckAddr1" placeholder="Street address, P.O. box" /></div>
+        <div class="skx-frow full"><label>Address Line 2 (optional)</label><input class="skx-input" id="ckAddr2" placeholder="Apartment, suite, landmark" /></div>
+        <div class="skx-frow"><label>City *</label><input class="skx-input" id="ckCity" placeholder="City" /></div>
+        <div class="skx-frow"><label>State / Province</label><input class="skx-input" id="ckState" placeholder="State" /></div>
+        <div class="skx-frow"><label>ZIP / Postal Code</label><input class="skx-input" id="ckZip" placeholder="ZIP code" /></div>
+        <div class="skx-frow"><label>Country *</label><input class="skx-input" id="ckCountry" placeholder="Country" /></div>
+        <div class="skx-frow full"><label>Order Notes (optional)</label><textarea class="skx-textarea" id="ckNotes" placeholder="Delivery instructions, gift note, etc."></textarea></div>
+      </div>
+    </div>
+
+    <div class="es-card">
+      <h2><span class="num">3</span> Payment Method</h2>
+      <div id="skPaymentMethods"></div>
+    </div>
+
+    <div class="es-card">
+      <h2><span class="num">4</span> Place Your Order</h2>
+      <div id="skPlaceOrderArea"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="es-foot">&copy; <span id="yr"></span> <span data-store-name>Essentials</span>. All rights reserved.</footer>
+
+<script src="./js/app.js"></script>
+<script src="./js/payments.js"></script>
+<script>
+  function renderOrderLines(cart){
+    document.getElementById('orderLines').innerHTML = cart.map(i=>`<div class="es-oline"><span>${i.name} &times;${i.qty}</span><span>${SK.price(i.price*i.qty)}</span></div>`).join('');
+    document.getElementById('orderTotal').textContent = SK.price(SK.cartTotal());
+  }
+  async function main(){
+    await SK.init();
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    document.getElementById('orderIdVal').textContent = SK._getOrderId();
+    const cart = SK.getCart();
+    if (!cart.length){
+      document.getElementById('checkoutEmpty').style.display = '';
+      document.getElementById('checkoutContent').style.display = 'none';
+      SK.reveal();
+      return;
+    }
+    renderOrderLines(cart);
+    SK.renderPlaceOrderArea('skPlaceOrderArea', './index3.html');
+    SK.reveal();
+  }
+  main();
+</script>
+</body>
+</html>
